@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mackenzie_academy/core/utils/asset_catalog.dart';
+import 'package:mackenzie_academy/core/utils/theme/color.dart';
 
 class SplachScreen extends StatelessWidget {
   const SplachScreen({super.key});
@@ -7,12 +9,12 @@ class SplachScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        backgroundColor: Color(0xff0D266C),
+        backgroundColor: AppColors.blue20,
         body: Stack(children: [
           Positioned.fill(
             child: Image(
                 fit: BoxFit.fitWidth,
-                image: AssetImage('assets/images/logo1.png')),
+                image: AssetImage(AssetCatalog.app_logo)),
           )
         ]));
   }
