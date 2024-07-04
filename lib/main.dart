@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/SplashScreen.dart';
+import 'package:mackenzie_academy/auth/login_or_register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,9 +9,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  SplachScreen(),
+      home: LoginOrRegister(),
     );
   }
 }
