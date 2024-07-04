@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const ROUTE_NAME = '/login-screen';
+
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
