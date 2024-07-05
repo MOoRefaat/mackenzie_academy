@@ -1,16 +1,46 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mackenzie_academy/helper_function.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   void Function()? onTap;
-  RegisterScreen({super.key,required this.onTap});
+  RegisterScreen({super.key, required this.onTap});
 
-  TextEditingController userNameController=TextEditingController();
-  TextEditingController passwordController=TextEditingController();
-  TextEditingController confirmPasswordController=TextEditingController();
-  TextEditingController emailController=TextEditingController();
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
 
-  void register(){
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController userNameController = TextEditingController();
 
+  TextEditingController passwordController = TextEditingController();
+
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+
+  void register() async {
+    showDialog(
+        context: context,
+        builder: (context) =>
+        const Center(
+          child: CircularProgressIndicator(),
+        ));
+    if (passwordController.text != confirmPasswordController.text) {
+      Navigator.pop(context);
+      displayMessageToUser("Passwords Don't Match", context);
+    }
+    else {
+      try {
+        UserCredential? userCredentials = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        displayMessageToUser(e.code, context);
+      }
+    }
   }
 
   @override
@@ -24,8 +54,7 @@ class RegisterScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             // Logo
-            Image.asset('assets/images/logo2.png',
-                height: 200.0),
+            Image.asset('assets/images/logo2.png', height: 200.0),
             const SizedBox(height: 20),
             // Username TextField
             Directionality(
@@ -109,7 +138,7 @@ class RegisterScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 register();
-                },
+              },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Color(0xFF0A155A),
                 backgroundColor: Colors.white, // foreground
@@ -124,7 +153,7 @@ class RegisterScreen extends StatelessWidget {
 
             // Sign up text
             GestureDetector(
-              onTap: onTap,
+              onTap: widget.onTap,
               child: const Text(
                 'لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
                 style: TextStyle(color: Colors.white),
@@ -181,5 +210,4 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -1,15 +1,40 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mackenzie_academy/helper_function.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   void Function()? onTap;
 
   LoginScreen({super.key,required this.onTap});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
    TextEditingController userNameController=TextEditingController();
+
    TextEditingController passwordController=TextEditingController();
 
-  void login(){}
+  void login() async{
+    showDialog(
+        context: context,
+        builder: (context) =>
+        const Center(
+          child: CircularProgressIndicator(),
+        ));
 
+      try {
+        UserCredential? userCredentials = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+            email: userNameController.text, password: passwordController.text);
+        if (context.mounted) Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        displayMessageToUser(e.code, context);
+      }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +93,8 @@ class LoginScreen extends StatelessWidget {
             // Login Button
             ElevatedButton(
               onPressed: () {
-                // Handle login action
-              },
+                login();
+                },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Color(0xFF0A155A),
                 backgroundColor: Colors.white, // foreground
@@ -83,7 +108,7 @@ class LoginScreen extends StatelessWidget {
             SizedBox(height: 20),
             // Sign up text
             GestureDetector(
-              onTap: onTap,
+              onTap: widget.onTap,
               child: const Text(
                 'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
                 style: TextStyle(color: Colors.white),
@@ -116,7 +141,7 @@ class LoginScreen extends StatelessWidget {
                       'assets/images/AppleLogo.png'), // Replace with your Google logo asset
                   iconSize: 50,
                   onPressed: () {
-                    login();
+
                     },
                 ),
                 Container(
