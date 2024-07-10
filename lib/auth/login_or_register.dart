@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/login_with_firebase.dart';
-import 'package:mackenzie_academy/register_with_firebase.dart';
+import 'package:mackenzie_academy/auth/login_with_firebase.dart';
+import 'package:mackenzie_academy/auth/register_with_firebase.dart';
 
 class LoginOrRegister extends StatefulWidget {
   const LoginOrRegister({super.key});

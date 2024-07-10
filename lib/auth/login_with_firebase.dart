@@ -2,47 +2,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/helper_function.dart';
 
-class RegisterScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   void Function()? onTap;
-  RegisterScreen({super.key, required this.onTap});
+  LoginScreen({super.key, required this.onTap});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController userNameController = TextEditingController();
-
-  TextEditingController passwordController = TextEditingController();
-
-  TextEditingController confirmPasswordController = TextEditingController();
-
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
-
-  void register() async {
+  TextEditingController passwordController = TextEditingController();
+  void login() async {
     showDialog(
         context: context,
-        builder: (context) =>
-        const Center(
-          child: CircularProgressIndicator(),
-        ));
-    if (passwordController.text != confirmPasswordController.text) {
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    try {
+      UserCredential? userCredentials = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text);
+      if (context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      displayMessageToUser("Passwords Don't Match", context);
-    }
-    else {
-      try {
-        UserCredential? userCredentials = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        Navigator.pop(context);
-      } on FirebaseAuthException catch (e) {
-        Navigator.pop(context);
-        displayMessageToUser(e.code, context);
-      }
+      displayMessageToUser(e.code, context);
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Directionality(
               textDirection: TextDirection.rtl,
               child: TextField(
-                controller: userNameController,
+                controller: emailController,
                 decoration: InputDecoration(
                   hintText: 'اسم المستخدم',
                   hintStyle: TextStyle(color: Colors.white),
@@ -74,26 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            SizedBox(height: 20),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'البريد الإلكتروني',
-                  hintStyle: TextStyle(color: Colors.white),
-                  prefixIcon: Icon(Icons.person, color: Colors.white),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            SizedBox(height: 20),
-            // Password TextField
+            const SizedBox(height: 20),
             Directionality(
               textDirection: TextDirection.rtl,
               child: TextField(
@@ -114,30 +81,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: TextField(
-                controller: confirmPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'تأكيد كلمة المرور',
-                  hintStyle: TextStyle(color: Colors.white),
-                  prefixIcon: Icon(Icons.lock, color: Colors.white),
-                  suffixIcon: Icon(Icons.visibility, color: Colors.white),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            SizedBox(height: 20),
-            // Login Button
             ElevatedButton(
-              onPressed: () {
-                register();
+              onPressed: () async {
+                if (emailController.text.isEmpty ||
+                    passwordController.text.isEmpty) {
+                  AlertDialog(
+                      title: Text("Email and password cannot be empty"));
+                  return;
+                }
+                login();
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Color(0xFF0A155A),
@@ -150,18 +102,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: const Text('تسجيل الدخول'),
             ),
             SizedBox(height: 20),
-
             // Sign up text
             GestureDetector(
               onTap: widget.onTap,
               child: const Text(
-                'لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
+                'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
                 style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(height: 20),
-
-            // Social Media Login Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -173,8 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: Color(0xFFECE9EC),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(
-                        12.0), // Adjust the padding as needed
+                    padding: const EdgeInsets.all(12.0),
                     child: ClipOval(
                       child: Image.asset('assets/images/googleLogo.png',
                           fit: BoxFit.cover),
@@ -182,12 +130,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: Image.asset(
-                      'assets/images/AppleLogo.png'), // Replace with your Google logo asset
+                  icon: Image.asset('assets/images/AppleLogo.png'),
                   iconSize: 50,
-                  onPressed: () {
-                    // Handle Apple login
-                  },
+                  onPressed: () {},
                 ),
                 Container(
                   width: 52.0,

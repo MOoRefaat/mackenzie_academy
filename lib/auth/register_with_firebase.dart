@@ -1,39 +1,69 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/helper_function.dart';
+import 'auth.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   void Function()? onTap;
-
-  LoginScreen({super.key,required this.onTap});
+  RegisterScreen({super.key, required this.onTap});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-   TextEditingController userNameController=TextEditingController();
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController userNameController = TextEditingController();
 
-   TextEditingController passwordController=TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  void login() async{
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+
+  Future<void> createUserDocument(UserCredential? userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userCredential.user!.uid)
+            .set({
+          "email": userCredential.user!.email,
+          'userName': userNameController.text,
+          'role': 'User'
+        });
+        print("User document created successfully");
+      } catch (e) {
+        print("Failed to create user document: $e");
+      }
+    }
+  }
+
+  void register() async {
     showDialog(
         context: context,
-        builder: (context) =>
-        const Center(
-          child: CircularProgressIndicator(),
-        ));
-
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+    if (passwordController.text != confirmPasswordController.text) {
+      Navigator.pop(context);
+      displayMessageToUser("Passwords Don't Match", context);
+    } else {
       try {
         UserCredential? userCredentials = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-            email: userNameController.text, password: passwordController.text);
-        if (context.mounted) Navigator.pop(context);
+            .createUserWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text);
+        createUserDocument(userCredentials);
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => AuthPage()),
+        );
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
         displayMessageToUser(e.code, context);
       }
-
+    }
   }
 
   @override
@@ -47,8 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             // Logo
-            Image.asset('assets/images/logo2.png',
-                height: 200.0), // Replace with your logo asset
+            Image.asset('assets/images/logo2.png', height: 200.0),
             const SizedBox(height: 20),
             // Username TextField
             Directionality(
@@ -57,6 +86,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: userNameController,
                 decoration: InputDecoration(
                   hintText: 'اسم المستخدم',
+                  hintStyle: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(Icons.person, color: Colors.white),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.1),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(height: 20),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  hintText: 'البريد الإلكتروني',
                   hintStyle: TextStyle(color: Colors.white),
                   prefixIcon: Icon(Icons.person, color: Colors.white),
                   filled: true,
@@ -90,11 +137,55 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(height: 20),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: 'تأكيد كلمة المرور',
+                  hintStyle: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(Icons.lock, color: Colors.white),
+                  suffixIcon: Icon(Icons.visibility, color: Colors.white),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.1),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            SizedBox(height: 20),
             // Login Button
             ElevatedButton(
               onPressed: () {
-                login();
-                },
+                register();
+              },
+              // onPressed: () async {
+              //   if (emailController.text.isEmpty ||
+              //       passwordController.text.isEmpty) {
+              //     AlertDialog(title: Text("Email and password cannot be empty"));
+              //     return;
+              //   }
+              //   if (confirmPasswordController.text.isEmpty ||
+              //       passwordController.text != confirmPasswordController.text) {
+              //     AlertDialog(title: Text("confirm password does not match"));
+              //     return;
+              //   }
+              //   try {
+              //     final user = await AuthHelper.signupWithEmail(
+              //         email: emailController.text,
+              //         password: passwordController.text);
+              //     createUserDocument(user);
+              //     if (user != null) {
+              //       AlertDialog(title: Text("signup successful"));
+              //       Navigator.pop(context);
+              //     }
+              //   } catch (e) {
+              //     print(e);
+              //   }
+              // },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Color(0xFF0A155A),
                 backgroundColor: Colors.white, // foreground
@@ -106,11 +197,12 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text('تسجيل الدخول'),
             ),
             SizedBox(height: 20),
+
             // Sign up text
             GestureDetector(
               onTap: widget.onTap,
               child: const Text(
-                'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
+                'لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -141,8 +233,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       'assets/images/AppleLogo.png'), // Replace with your Google logo asset
                   iconSize: 50,
                   onPressed: () {
-
-                    },
+                    // Handle Apple login
+                  },
                 ),
                 Container(
                   width: 52.0,
