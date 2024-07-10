@@ -88,15 +88,16 @@ class _SplashScreenState extends State<SplashScreen> {
     return _buildSplashScreenWidget();
   }
 
-    _buildSplashScreenWidget () {
-    return const Scaffold(
+  _buildSplashScreenWidget() {
+    return Scaffold(
         backgroundColor: AppColors.blue20,
         body: Stack(children: [
           Positioned.fill(
-            child: Image(
-                fit: BoxFit.fitWidth,
-                image: AssetImage(AssetCatalog.app_logo)),
-          )
+            child: _buildLogo()
+
+            // Image(
+            //     fit: BoxFit.fitWidth, image: AssetImage(AssetCatalog.app_logo)),
+          ),
         ]));
   }
 
@@ -111,6 +112,12 @@ class _SplashScreenState extends State<SplashScreen> {
     // await Navigator.of(context).pushReplacementNamed(LoginScreen.ROUTE_NAME);
   }
 
+  _buildLogo() {
+    return SvgPicture.asset(
+      AssetCatalog.new_logo,
+      height: 139,
+      width: 138,
+      color: AppColors.white,
+    );
   }
-
-
+}

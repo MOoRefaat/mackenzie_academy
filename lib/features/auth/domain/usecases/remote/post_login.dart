@@ -5,11 +5,11 @@ import 'package:mackenzie_academy/features/auth/data/models/login_request.dart';
 import 'package:mackenzie_academy/features/auth/data/models/login_response.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
 
-class PostLogin extends BaseUseCase<LoginResponse, LoginRequest> {
+class PostLoginUseCase extends BaseUseCase<LoginResponse, LoginRequest> {
   // final BaseRepository _repository;
   final AuthRepository _repository;
 
-  PostLogin(this._repository);
+  PostLoginUseCase(this._repository);
 
   @override
   Future<Either<Failure, LoginResponse>> call(LoginRequest parameters) {

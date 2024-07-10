@@ -4,6 +4,7 @@ import 'package:mackenzie_academy/core/router/app_router.dart';
 import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/bloc_observer.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
+import 'package:mackenzie_academy/features/splash/presentation/screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: SplashScreen(),
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

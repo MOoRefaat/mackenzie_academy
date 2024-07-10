@@ -7,11 +7,11 @@ import 'package:mackenzie_academy/features/auth/data/models/register_request.dar
 import 'package:mackenzie_academy/features/auth/data/models/register_response.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
 
-class PostRegister extends BaseUseCase<RegisterResponse, RegisterRequest> {
+class PostRegisterUseCase extends BaseUseCase<RegisterResponse, RegisterRequest> {
   // final BaseRepository _repository;
    final AuthRepository _repository;
 
-  PostRegister(this._repository);
+  PostRegisterUseCase(this._repository);
 
   @override
   Future<Either<Failure, RegisterResponse>> call(RegisterRequest parameters) {
