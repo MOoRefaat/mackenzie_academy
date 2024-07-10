@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mackenzie_academy/core/utils/asset_catalog.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
-import 'package:mackenzie_academy/features/login/presentation/screens/login_screen.dart';
 
 // class SplachScreen extends StatelessWidget {
 //   const SplachScreen({super.key});
@@ -109,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// navigate to home screen
   Future<void> navigationPage() async {
-    await Navigator.of(context).pushReplacementNamed(LoginScreen.ROUTE_NAME);
+    // await Navigator.of(context).pushReplacementNamed(LoginScreen.ROUTE_NAME);
   }
 
   }
