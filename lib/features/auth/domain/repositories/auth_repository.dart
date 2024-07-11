@@ -6,7 +6,7 @@ import 'package:mackenzie_academy/features/auth/data/models/register_response.da
 
 abstract class AuthRepository {
 
-  Future<Either<Failure, LoginResponse>> login(LoginRequest loginParams);
+  Future<Either<Failure, LoginResponse>> loginByEmail(LoginRequest loginParams);
 
   Future<Either<Failure, RegisterRequest>> register(RegisterRequest registerParams);
 

@@ -10,14 +10,14 @@ abstract class AuthRemoteDatasource {
       RegisterRequest registerParams,
       );
 
-  Future<Either<Failure, LoginResponse>> login(LoginRequest loginParams);
+  Future<Either<Failure, LoginResponse>> loginByEmail(LoginRequest loginParams);
 
 }
 
 class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
 
   @override
-  Future<Either<Failure, LoginResponse>> login(LoginRequest loginParams) {
+  Future<Either<Failure, LoginResponse>> loginByEmail(LoginRequest loginParams) {
     // TODO: implement login
     throw UnimplementedError();
   }

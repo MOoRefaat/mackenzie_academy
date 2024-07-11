@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:mackenzie_academy/core/base/repository/base_repository.dart';
 import 'package:mackenzie_academy/core/base/usecase/base_usecase.dart';
 import 'package:mackenzie_academy/core/error/failure.dart';
 import 'package:mackenzie_academy/core/error/failure.dart';

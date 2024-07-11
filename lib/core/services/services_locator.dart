@@ -1,5 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:mackenzie_academy/core/base/repository/base_repository.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/features/auth/data/datasource/remote/login_remote_data_source.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
@@ -17,7 +16,7 @@ class ServicesLocator {
     // servicesLocator.registerLazySingleton(
     //         () => (servicesLocator()));
     servicesLocator.registerLazySingleton(
-            () => PostLoginUseCase(servicesLocator()));
+            () => PostLoginByEmailUseCase(servicesLocator()));
     servicesLocator.registerLazySingleton(
             () => PostRegisterUseCase(servicesLocator()));
 
@@ -26,15 +25,13 @@ class ServicesLocator {
 
 
     /// Repository
-    // servicesLocator.registerLazySingleton<BaseRepository>(
-    //         () => AuthRepository(servicesLocator(), servicesLocator()));
+    // servicesLocator.registerLazySingleton<AuthRepositorysitory>(() => AuthRepository());
+
 
     /// DATA SOURCE
-    servicesLocator.registerLazySingleton<AuthRemoteDatasource>(
-            () => AuthRemoteDatasourceImpl());
+    servicesLocator.registerLazySingleton<AuthRemoteDatasource>(() => AuthRemoteDatasourceImpl());
 
 
-    servicesLocator.registerFactory<SharedPreferenceManager>(
-            () => SharedPreferenceManager());
+    servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager());
   }
 }

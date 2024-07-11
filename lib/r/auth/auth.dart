@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../adminHomePage.dart';
-import '../home_page.dart';
+import 'package:mackenzie_academy/features/home/admin/presentation/screens/admin_home_screen.dart';
+import 'package:mackenzie_academy/features/home/coach/presentation/screens/home_screen.dart';
 import 'login_or_register.dart';
 
 class AuthPage extends StatelessWidget {
@@ -39,9 +38,9 @@ class AuthPage extends StatelessWidget {
                     final Map<String, dynamic> user =
                         userDoc.data() as Map<String, dynamic>;
                     if (user['role'] == 'Admin') {
-                      return AdminHomePage(); // Change this to your Admin home page
+                      return AdminHomeScreen(); // Change this to your Admin home page
                     } else {
-                      return HomePage();
+                      return HomeScreen();
                     }
                   } else {
                     print("User data is null");
