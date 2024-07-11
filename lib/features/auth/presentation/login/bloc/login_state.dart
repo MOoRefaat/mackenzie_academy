@@ -5,4 +5,11 @@ sealed class LoginState {}
 
 final class LoginInitial extends LoginState {}
 
-class NavigateToHomeState extends LoginState {}
+// navigate
+class NavigateToRegisterScreenState extends LoginState {}
+
+class NavigateToUserHomeScreenState extends LoginState {}
+
+class NavigateToAdminHomeScreenState extends LoginState {}
+
+class NavigateToCoachHomeScreenState extends LoginState {}

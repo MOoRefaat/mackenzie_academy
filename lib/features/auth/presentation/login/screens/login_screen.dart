@@ -15,9 +15,9 @@ class LoginScreen extends StatelessWidget {
     return BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
       if (state is LoginInitial) {
 
-      } else if (state is NavigateToHomeState) {
+      } else if (state is NavigateToRegisterScreenState) {
         _navigateToHome();
-      } else if (state is NavigateToHomeState) {
+      } else if (state is NavigateToRegisterScreenState) {
         _navigateToHome();
       }
     }, builder: (context, state) {

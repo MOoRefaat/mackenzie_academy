@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_dialog.dart';
-import 'auth.dart';
+import 'package:mackenzie_academy/features/auth/presentation/login/auth.dart';
 
 class RegisterScreen extends StatefulWidget {
   void Function()? onTap;
@@ -43,8 +43,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     showDialog(
         context: context,
         builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
+          child: CircularProgressIndicator(),
+        ));
     if (passwordController.text != confirmPasswordController.text) {
       Navigator.pop(context);
       displayMessageToUser("Passwords Don't Match", context);
@@ -52,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         UserCredential? userCredentials = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
+            email: emailController.text, password: passwordController.text);
         createUserDocument(userCredentials);
         Navigator.pop(context);
         Navigator.pushReplacement(
