@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/helper_function.dart';
+import 'package:mackenzie_academy/r/helper_function.dart';
 import 'auth.dart';
 
 class RegisterScreen extends StatefulWidget {

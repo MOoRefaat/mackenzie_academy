@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/helper_function.dart';
+import 'package:mackenzie_academy/r/helper_function.dart';
 
 class LoginScreen extends StatefulWidget {
   void Function()? onTap;
