@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/helper_function.dart';
-import 'auth.dart';
+import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/core/widgets/component/custom_dialog.dart';
+import 'package:mackenzie_academy/features/auth/presentation/login/auth.dart';
 
 class RegisterScreen extends StatefulWidget {
-  void Function()? onTap;
-  RegisterScreen({super.key, required this.onTap});
+  // void Function()? onTap;
+  RegisterScreen({super.key,
+    // required this.onTap
+  });
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -43,8 +46,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     showDialog(
         context: context,
         builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
+          child: CircularProgressIndicator(),
+        ));
     if (passwordController.text != confirmPasswordController.text) {
       Navigator.pop(context);
       displayMessageToUser("Passwords Don't Match", context);
@@ -52,13 +55,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       try {
         UserCredential? userCredentials = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
+            email: emailController.text, password: passwordController.text);
         createUserDocument(userCredentials);
         Navigator.pop(context);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AuthPage()),
-        );
+        Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
       } on FirebaseAuthException catch (e) {
         Navigator.pop(context);
         displayMessageToUser(e.code, context);
@@ -200,7 +200,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             // Sign up text
             GestureDetector(
-              onTap: widget.onTap,
+              // onTap: widget.onTap,
               child: const Text(
                 'لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
                 style: TextStyle(color: Colors.white),

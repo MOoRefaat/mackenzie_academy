@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/helper_function.dart';
+import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/core/widgets/component/custom_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
-  void Function()? onTap;
-  LoginScreen({super.key, required this.onTap});
+  // void Function()? onTap;
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -13,22 +14,25 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   void login() async {
     showDialog(
         context: context,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
+        builder: (context) =>
+        const Center(
+          child: CircularProgressIndicator(),
+        ));
     try {
       UserCredential? userCredentials = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
+          email: emailController.text, password: passwordController.text);
       if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       displayMessageToUser(e.code, context);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,7 +108,11 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 20),
             // Sign up text
             GestureDetector(
-              onTap: widget.onTap,
+              onTap: () {
+                Navigator.pushNamed(
+                    context,
+                    RoutesName.registerRoute);
+                },
               child: const Text(
                 'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
                 style: TextStyle(color: Colors.white),

@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mackenzie_academy/service_details_screen.dart';
+import 'package:mackenzie_academy/features/service_details_screen.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class UserHomeScreen extends StatelessWidget {
+  UserHomeScreen({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 

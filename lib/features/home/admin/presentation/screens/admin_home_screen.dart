@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AdminHomePage extends StatelessWidget {
-  AdminHomePage({super.key});
+class AdminHomeScreen extends StatelessWidget {
+  AdminHomeScreen({super.key});
 
   void logout() {
     FirebaseAuth.instance.signOut();
