@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "516694218193",
+    "firebase_url": "https://mackenzieacademy-53156-default-rtdb.firebaseio.com",
+    "project_id": "mackenzieacademy-53156",
+    "storage_bucket": "mackenzieacademy-53156.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516694218193:android:0c734a2e7f0a366d1cfcf0",
+        "android_client_info": {
+          "package_name": "com.example.mackenzie_academy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzpaH99Fya05AExT3I9tK0uxiXB4WsIw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
