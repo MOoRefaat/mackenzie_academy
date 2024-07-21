@@ -10,8 +10,12 @@ import 'package:mackenzie_academy/features/splash/presentation/screens/splash_sc
 import 'features/auth/presentation/login/firebase_options.dart';
 
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   ServicesLocator().init();
   Bloc.observer = MyBlocObserver();
   runApp(MyApp());
@@ -23,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: AuthPage(),
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

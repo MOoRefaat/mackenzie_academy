@@ -94,10 +94,8 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: AppColors.blue20,
         body: Stack(children: [
           Positioned.fill(
-            child: _buildLogo()
-
-            // Image(
-            //     fit: BoxFit.fitWidth, image: AssetImage(AssetCatalog.app_logo)),
+            child: Image(
+                fit: BoxFit.fitWidth, image: AssetImage(AssetCatalog.app_logo)),
           ),
         ]));
   }

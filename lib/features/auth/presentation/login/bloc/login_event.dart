@@ -9,17 +9,22 @@ class NavigateToRegisterScreenEvent extends LoginEvent {
   List<Object?> get props => throw UnimplementedError();
 }
 
-class NavigateToUserHomeScreenEvent extends LoginEvent {
+class NavigateHomeScreenEvent extends LoginEvent {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
 
-class NavigateToAdminHomeScreenEvent extends LoginEvent {
-  @override
-  List<Object?> get props => throw UnimplementedError();
-}
-
-class NavigateToCoachHomeScreenEvent extends LoginEvent {
-  @override
-  List<Object?> get props => throw UnimplementedError();
-}
+// class NavigateToUserHomeScreenEvent extends LoginEvent {
+//   @override
+//   List<Object?> get props => throw UnimplementedError();
+// }
+//
+// class NavigateToAdminHomeScreenEvent extends LoginEvent {
+//   @override
+//   List<Object?> get props => throw UnimplementedError();
+// }
+//
+// class NavigateToCoachHomeScreenEvent extends LoginEvent {
+//   @override
+//   List<Object?> get props => throw UnimplementedError();
+// }
