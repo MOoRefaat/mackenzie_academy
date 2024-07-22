@@ -22,10 +22,10 @@ class PasswordEmptyFormatState extends LoginState {
 class PasswordFormatCorrectState extends LoginState {}
 
 class ValidLoginFormState extends LoginState {
-  final String userName;
+  final String email;
   final String password;
 
-  ValidLoginFormState(this.userName, this.password);
+  ValidLoginFormState(this.email, this.password);
 }
 
 class LoginLoadingState extends LoginState {}
@@ -46,6 +46,15 @@ class LoginFailState extends LoginState {
 
   @override
   List<Object?> get props => [messageKey];
+}
+
+// net work error
+class NetworkErrorState extends LoginState {
+  final String message;
+
+  NetworkErrorState(this.message);
+
+  List<Object?> get props => [message];
 }
 
 // navigate

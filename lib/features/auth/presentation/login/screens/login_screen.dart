@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
@@ -9,19 +10,44 @@ import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bl
 class LoginScreen extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginBloc(),
+      create: (context) => servicesLocator<LoginBloc>(),
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
+
           if (state is LoginInitial) {
-          } else if (state is NavigateToRegisterScreenState) {
-            _navigateToRegister();
-          } else if (state is NavigateToHomeScreenState) {
-            _navigateToHome();
+            // TODO  : check if email and password is remembered
           }
+          if (state is EmailEmptyFormatState) {
+            _emailEmptyFormatState("translate(state.emailValidatorMessage)",context);
+          } else if (state is EmailFormatCorrectState) {
+            _emailFormatCorrectState();
+          } else if (state is PasswordEmptyFormatState) {
+            _passwordEmptyFormatState(
+                "translate(state.passwordValidatorMessage)",context
+            );
+          } else if (state is PasswordFormatCorrectState) {
+            _passwordFormatCorrectState();
+          } else if (state is NetworkErrorState) {
+            _failErrorMessage(errorMessage: "translate(state.message)",context: context);
+          } else if (state is ValidLoginFormState) {
+            _callApiLogin(state.email, state.password,context);
+          } else if (state is LoginLoadingState) {
+            _loginLoadingState();
+          } else if (state is LoginFailState) {
+            _failErrorMessage(errorMessage: "translate(state.messageKey)", context: context,);
+          } else if (state is LoginSuccessState) {
+            _loginSuccessState(context);
+          } else if (state is NavigateToHomeScreenState) {
+            _navigateToHome(context);
+          } else if (state is NavigateToRegisterScreenState) {
+            _navigateToRegister(context);
+          }
+
         },
         builder: (context, state) {
           return _loginWidget(context: context);
@@ -49,7 +75,7 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, RoutesName.registerRoute);
+                BlocProvider.of<LoginBloc>(context).add(NavigateToRegisterScreenEvent());
               },
               child: const Text(
                 'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
@@ -164,11 +190,173 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToHome() {
-    // Add navigation to home logic here
+  // states fun
+  void _loginLoadingState() {
+    showLoading();
   }
 
-  void _navigateToRegister() {
-    // Add navigation to register logic here
+  void _emailEmptyFormatState(String errorMessage,BuildContext context) {
+    hideLoading();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("${errorMessage}"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _emailFormatCorrectState() {
+    // passwordErrorMessage = "";
+  }
+
+  void _passwordEmptyFormatState(String errorMessage,BuildContext context) {
+    hideLoading();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("${errorMessage}"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _passwordFormatCorrectState() {
+    // passwordErrorMessage = "";
+  }
+
+  void _callApiLogin(String email, String password,BuildContext context) {
+    BlocProvider.of<LoginBloc>(context).add(CallApiLoginEvent(email: email, password: password));
+  }
+
+  void _loginSuccessState(BuildContext context) {
+    hideLoading();
+    BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent());
+  }
+
+  void _failErrorMessage({required String errorMessage,required BuildContext context}) {
+    hideLoading();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("${errorMessage}"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _navigateToHome(BuildContext context) {
+    hideLoading();
+    Navigator.of(context).pushReplacementNamed(RoutesName.authPageRoute);
+  }
+
+  void _navigateToRegister(BuildContext context) {
+    hideLoading();
+    Navigator.of(context).pushNamed(RoutesName.registerRoute);
+  }
+
+  // TODO : Move to file LoadingManager
+  void changeState() {
+    // setState(() {});
+  }
+
+  void runChangeState() {
+    changeState();
+  }
+
+  void showLoading() async {
+    if (!isLoading) {
+      isLoading = true;
+      runChangeState();
+    }
+  }
+
+  void hideLoading() async {
+    if (isLoading) {
+      isLoading = false;
+      runChangeState();
+    }
+  }
+
+  Widget loadingManagerWidget() {
+    if (isLoading) {
+      return customLoadingWidget();
+    } else {
+      return getEmptyWidget();
+    }
+  }
+
+  Widget customLoadingWidget() {
+    return FullScreenLoaderWidget.onlyAnimation();
+  }
+
+  Widget getEmptyWidget() {
+    return const SizedBox.shrink();
+  }
+
+
+}
+// TODO : Move to file custom Widget
+class FullScreenLoaderWidget extends StatelessWidget {
+  final String? message;
+
+  const FullScreenLoaderWidget({super.key, this.message});
+
+  factory FullScreenLoaderWidget.onlyAnimation() {
+    return const FullScreenLoaderWidget();
+  }
+
+  factory FullScreenLoaderWidget.message(String message) {
+    return FullScreenLoaderWidget(message: message);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    return Container(
+      color: theme.primaryColor.withOpacity(0.10),
+      child: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+        ),
+      ),
+    );
+  }
+
+  Widget txtWithLoading(Color color) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(width: 20),
+        Text(message ?? "", style: TextStyle(fontSize: 25, color: color))
+      ],
+    );
   }
 }

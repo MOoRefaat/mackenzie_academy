@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/features/auth/presentation/login/auth.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
 import 'package:mackenzie_academy/features/auth/presentation/register/screens/register_screen.dart';
 import 'package:mackenzie_academy/features/home/admin/presentation/screens/admin_home_screen.dart';
@@ -21,6 +22,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => CoachHomeScreen());
       case RoutesName.userHomeRoute:
         return MaterialPageRoute(builder: (_) => UserHomeScreen());
+      case RoutesName.authPageRoute:
+        return MaterialPageRoute(builder: (_) => AuthPage());
     }
   }
 }

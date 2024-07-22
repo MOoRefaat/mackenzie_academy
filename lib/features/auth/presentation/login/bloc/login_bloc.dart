@@ -1,24 +1,32 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/core/utils/validator.dart';
+import 'package:mackenzie_academy/features/auth/data/models/login_request.dart';
 import 'package:mackenzie_academy/features/auth/data/models/login_response.dart';
+import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_login.dart';
 import 'package:meta/meta.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial()) {
+  final PostLoginByEmailUseCase _postLoginByEmailUseCase;
+  final SharedPreferenceManager sharedPreferenceManager;
+
+
+  LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager) : super(LoginInitial()) {
     on<LoginEvent>((event, emit) {
       // TODO: implement event handler
-      on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
-      //
       on<ValidateEmailEvent>(_onValidateEmailEvent);
       on<ValidatePasswordEvent>(_onValidatePasswordEvent);
       on<LoginButtonEvent>(_onLoginEvent);
       on<CallApiLoginEvent>(_onCallApiLoginEvent);
       on<ValidateStoredDataEvent>(_onValidateStoredDataEvent);
+      on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
+      on<NavigateToRegisterScreenEvent>(_onNavigateToRegisterEvent);
+
     }
     );
   }
@@ -37,7 +45,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _onValidateEmailEvent(
       ValidateEmailEvent event, Emitter<LoginState> emit) {
-    ValidationState validateState = Validator.validateName(event.userName);
+    ValidationState validateState = Validator.validateEmail(event.email);
     if (validateState == ValidationState.Valid) {
       emit(EmailFormatCorrectState());
     } else {
@@ -77,15 +85,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _onCallApiLoginEvent(
       CallApiLoginEvent event, Emitter<LoginState> emit) async {
-    // emit(LoginLoadingState());
-    // String encoded =
-    // Utilities.encodeKeyAndPasswordForHR(event.userName, event.password);
-    // LoginState? loginState = await _authenticationRepo
-    //     .performLogin(LoginRequest(userCredential: encoded));
+    emit(LoginLoadingState());
+    // LoginState? loginState = await _postLoginByEmailUseCase();
     //
     // if (loginState is LoginSuccessState) {
-    //   prefManager.setUsername(event.userName);
-    //   prefManager.setUserPassword(event.password);
+    //   // sharedPreferenceManager.setUsername(event.userName);
+    //   // sharedPreferenceManager.setUserPassword(event.password);
     //   emit(LoginSuccessState(loginState.user));
     // } else if (loginState is LoginFailState) {
     //   emit(LoginFailState(loginState.messageKey));
@@ -97,6 +102,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   FutureOr<void> _onNavigateToHomeEvent(
       NavigateHomeScreenEvent event, Emitter<LoginState> emit) {
     emit(NavigateToHomeScreenState());
+  }
+
+  FutureOr<void> _onNavigateToRegisterEvent(
+      NavigateToRegisterScreenEvent event, Emitter<LoginState> emit) {
+    emit(NavigateToRegisterScreenState());
   }
 }
 

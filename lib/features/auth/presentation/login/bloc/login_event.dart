@@ -9,12 +9,12 @@ class ValidateStoredDataEvent extends LoginEvent {
 }
 
 class ValidateEmailEvent extends LoginEvent {
-  final String userName;
+  final String email;
 
-  ValidateEmailEvent({required this.userName});
+  ValidateEmailEvent({required this.email});
 
   @override
-  List<Object?> get props => [userName];
+  List<Object?> get props => [email];
 }
 
 class ValidatePasswordEvent extends LoginEvent {
@@ -38,13 +38,13 @@ class LoginButtonEvent extends LoginEvent {
 
 // Api's call
 class CallApiLoginEvent extends LoginEvent {
-  final String userName;
+  final String email;
   final String password;
 
-  CallApiLoginEvent({required this.userName, required this.password});
+  CallApiLoginEvent({required this.email, required this.password});
 
   @override
-  List<Object?> get props => [userName, password];
+  List<Object?> get props => [email, password];
 }
 
 

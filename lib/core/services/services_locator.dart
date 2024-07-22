@@ -1,20 +1,21 @@
 import 'package:get_it/get_it.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/features/auth/data/datasource/remote/login_remote_data_source.dart';
+import 'package:mackenzie_academy/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_login.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_register.dart';
+import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
 
 final servicesLocator = GetIt.instance;
 
 class ServicesLocator {
   void init() {
     // Bloc
-
+    servicesLocator.registerLazySingleton(
+            () => LoginBloc(servicesLocator(),servicesLocator()));
 
     /// Remote Use Cases
-    // servicesLocator.registerLazySingleton(
-    //         () => (servicesLocator()));
     servicesLocator.registerLazySingleton(
             () => PostLoginByEmailUseCase(servicesLocator()));
     servicesLocator.registerLazySingleton(
@@ -25,7 +26,8 @@ class ServicesLocator {
 
 
     /// Repository
-    // servicesLocator.registerLazySingleton<AuthRepositorysitory>(() => AuthRepository());
+    servicesLocator.registerLazySingleton<AuthRepository>(
+            () => AuthRepositoryImpl(servicesLocator()));
 
 
     /// DATA SOURCE

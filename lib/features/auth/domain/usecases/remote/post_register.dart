@@ -7,7 +7,6 @@ import 'package:mackenzie_academy/features/auth/data/models/register_response.da
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
 
 class PostRegisterUseCase extends BaseUseCase<RegisterResponse, RegisterRequest> {
-  // final BaseRepository _repository;
    final AuthRepository _repository;
 
   PostRegisterUseCase(this._repository);
