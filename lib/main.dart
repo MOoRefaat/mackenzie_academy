@@ -4,6 +4,7 @@ import 'package:mackenzie_academy/auth/auth.dart';
 
 import 'firebase_options.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
