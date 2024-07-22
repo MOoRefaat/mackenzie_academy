@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
 import 'package:mackenzie_academy/features/home/admin/presentation/screens/admin_home_screen.dart';
-import 'package:mackenzie_academy/features/home/coach/presentation/screens/coach_home_screen.dart';
 import 'package:mackenzie_academy/features/home/user/presentation/screens/user_home_screen.dart';
-import 'login_or_register.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -53,7 +53,7 @@ class AuthPage extends StatelessWidget {
               },
             );
           } else {
-            return const Text("data");
+            return LoginScreen();
           }
         },
       ),
