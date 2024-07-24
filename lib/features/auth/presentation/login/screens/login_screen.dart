@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
 import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
+import 'package:mackenzie_academy/core/widgets/component/custom_button.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
 
@@ -59,32 +60,34 @@ class LoginScreen extends StatelessWidget {
   Widget _loginWidget({required BuildContext context}) {
     return Scaffold(
       backgroundColor: AppColors.blue20,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _buildLogo(),
-            const SizedBox(height: 20),
-            _buildEmailTextField(),
-            const SizedBox(height: 20),
-            _buildPasswordTextField(),
-            const SizedBox(height: 20),
-            _buildLoginButton(context),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                BlocProvider.of<LoginBloc>(context).add(NavigateToRegisterScreenEvent());
-              },
-              child: const Text(
-                'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
-                style: TextStyle(color: Colors.white),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              _buildLogo(),
+              const SizedBox(height: 20),
+              _buildEmailTextField(),
+              const SizedBox(height: 20),
+              _buildPasswordTextField(),
+              const SizedBox(height: 20),
+              _buildLoginButton(context),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  BlocProvider.of<LoginBloc>(context).add(NavigateToRegisterScreenEvent());
+                },
+                child: const Text(
+                  'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            _buildSocialMediaLoginButtons()
-          ],
+              const SizedBox(height: 20),
+              _buildSocialMediaLoginButtons()
+            ],
+          ),
         ),
       ),
     );
@@ -114,39 +117,17 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildLoginButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () async {
-        if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text("Email and password cannot be empty"),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-          return;
-        }
-        // Perform login logic here
+    return CustomButton(
+      buttonLabelText : 'تسجيل الدخول',
+        buttonLabelStyle: TextStyle(color: AppColors.blue20),
+      backgroundColor: AppColors.white,
+      onPress: (){
+        BlocProvider.of<LoginBloc>(context).add(
+          LoginButtonEvent(email: emailController.text ,password: passwordController.text),
+        );
       },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Color(0xFF0A155A),
-        backgroundColor: Colors.white,
-        minimumSize: Size(double.infinity, 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-      child: const Text('تسجيل الدخول'),
-    );
+
+      );
   }
 
   Widget _buildSocialMediaLoginButtons() {

@@ -6,7 +6,7 @@ import 'package:mackenzie_academy/features/auth/data/models/register_request.dar
 import 'package:mackenzie_academy/features/auth/data/models/register_response.dart';
 
 abstract class AuthRemoteDatasource {
-  Future<Either<Failure, RegisterResponse>> register(
+  Future<RegisterResponse> register(
       RegisterRequest registerParams,
       );
 
@@ -15,15 +15,26 @@ abstract class AuthRemoteDatasource {
 }
 
 class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
-
   @override
-  Future<Either<Failure, LoginResponse>> loginByEmail(LoginRequest loginParams) {
-    // TODO: implement login
+  Future<Either<Failure, LoginResponse>> loginByEmail(LoginRequest loginParams) async {
+    print("1------------ AuthRemoteDatasourceImpl:loginByEmail");
+    // TODO: implement loginByEmail
+    //       try {
+    //         UserCredential? userCredentials = await FirebaseAuth.instance
+    //             .createUserWithEmailAndPassword(
+    //             email: emailController.text, password: passwordController.text);
+    //         createUserDocument(userCredentials);
+    //         Navigator.pop(context);
+    //         Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
+    //       } on FirebaseAuthException catch (e) {
+    //         Navigator.pop(context);
+    //         displayMessageToUser(e.code, context);
+    //       }
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, RegisterResponse>> register(RegisterRequest registerParams) {
+  Future<RegisterResponse> register(RegisterRequest registerParams) {
     // TODO: implement register
     throw UnimplementedError();
   }

@@ -17,8 +17,6 @@ class PostLoginByEmailUseCase extends BaseUseCase<LoginResponse, LoginRequest> {
   }
 
 
-
-
 // @override
 // Future<Either<Failure, RegisterResponse>> call(RegisterRequest params) =>
 //      _repository.register(params);

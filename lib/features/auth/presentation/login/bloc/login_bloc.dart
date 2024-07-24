@@ -5,18 +5,20 @@ import 'package:mackenzie_academy/core/shared_preference/shared_preference_manag
 import 'package:mackenzie_academy/core/utils/validator.dart';
 import 'package:mackenzie_academy/features/auth/data/models/login_request.dart';
 import 'package:mackenzie_academy/features/auth/data/models/login_response.dart';
+import 'package:mackenzie_academy/features/auth/domain/usecases/auth_validation_usecase.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_login.dart';
 import 'package:meta/meta.dart';
 
 part 'login_event.dart';
+
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final PostLoginByEmailUseCase _postLoginByEmailUseCase;
   final SharedPreferenceManager sharedPreferenceManager;
 
-
-  LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager) : super(LoginInitial()) {
+  LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager)
+      : super(LoginInitial()) {
     on<LoginEvent>((event, emit) {
       // TODO: implement event handler
       on<ValidateEmailEvent>(_onValidateEmailEvent);
@@ -26,9 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       on<ValidateStoredDataEvent>(_onValidateStoredDataEvent);
       on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
       on<NavigateToRegisterScreenEvent>(_onNavigateToRegisterEvent);
-
-    }
-    );
+    });
   }
 
   FutureOr<void> _onValidateStoredDataEvent(
@@ -49,7 +49,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (validateState == ValidationState.Valid) {
       emit(EmailFormatCorrectState());
     } else {
-      emit(EmailEmptyFormatState(emailValidatorMessage: "LangKeys.username_is_empty"));
+      emit(EmailEmptyFormatState(
+          emailValidatorMessage: "LangKeys.username_is_empty"));
     }
   }
 
@@ -60,34 +61,39 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(PasswordFormatCorrectState());
     } else {
       emit(PasswordEmptyFormatState(
-          passwordValidatorMessage: "LangKeys.try_with_correct_username_password"));
+          passwordValidatorMessage:
+              "LangKeys.try_with_correct_username_password"));
     }
   }
 
   FutureOr<void> _onLoginEvent(
       LoginButtonEvent event, Emitter<LoginState> emit) async {
-    // final validationsState = AuthValidationUseCase()
-    //     .validateFormUseCase(event.userName, event.password);
-    // if (validationsState.isNotEmpty) {
-    //   for (var element in validationsState) {
-    //     if (element == ValidationState.userNameEmpty) {
-    //       emit(UserNameEmptyFormatState(userNameValidatorMessage: LangKeys.username_is_empty));
-    //     } else if (element == ValidationState.passwordNumberEmpty) {
-    //       emit(PasswordEmptyFormatState(passwordValidatorMessage: LangKeys.password_is_empty));
-    //     } else if (element == ValidationState.Formatting) {
-    //       emit(UserNameEmptyFormatState(userNameValidatorMessage: LangKeys.try_with_correct_username_password));
-    //     }
-    //   }
-    // } else {
-    //   emit(ValidLoginFormState(event.email, event.password));
-    // }
+    final validationsState = AuthValidationUseCase()
+        .validateFormUseCase(event.email, event.password);
+    if (validationsState.isNotEmpty) {
+      for (var element in validationsState) {
+        if (element == ValidationState.userNameEmpty) {
+          emit(EmailEmptyFormatState(emailValidatorMessage: "email_is_empty"));
+        } else if (element == ValidationState.passwordNumberEmpty) {
+          emit(PasswordEmptyFormatState(
+              passwordValidatorMessage: "password_is_empty"));
+        } else if (element == ValidationState.Formatting) {
+          emit(EmailEmptyFormatState(
+              emailValidatorMessage: "try_with_correct_username_password"));
+        }
+      }
+    } else {
+      emit(ValidLoginFormState(event.email, event.password));
+    }
   }
 
   FutureOr<void> _onCallApiLoginEvent(
       CallApiLoginEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
-    // LoginState? loginState = await _postLoginByEmailUseCase();
-    //
+
+    // TODO : caal repo
+    // LoginState? loginState = await _postLoginByEmailUseCase;
+
     // if (loginState is LoginSuccessState) {
     //   // sharedPreferenceManager.setUsername(event.userName);
     //   // sharedPreferenceManager.setUserPassword(event.password);
@@ -97,6 +103,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // } else if (loginState is NetworkErrorState) {
     //   emit(NetworkErrorState(loginState.message));
     // }
+
+    final result = await _postLoginByEmailUseCase(
+        LoginRequest(email: event.email, password: event.password));
+
+    result.fold((l) => emit(LoginFailState(l.message)), (r) {
+      // emit(LoginSuccessState());
+    });
   }
 
   FutureOr<void> _onNavigateToHomeEvent(
@@ -109,4 +122,3 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(NavigateToRegisterScreenState());
   }
 }
-
