@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/core/utils/validator.dart';
 import 'package:mackenzie_academy/features/auth/data/models/login_request.dart';
@@ -18,19 +19,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final SharedPreferenceManager sharedPreferenceManager;
 
   LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager)
-      : super(LoginInitial()) {
-    on<LoginEvent>((event, emit) {
-      // TODO: implement event handler
-      on<ValidateEmailEvent>(_onValidateEmailEvent);
-      on<ValidatePasswordEvent>(_onValidatePasswordEvent);
-      on<LoginButtonEvent>(_onLoginEvent);
-      on<CallApiLoginEvent>(_onCallApiLoginEvent);
-      on<ValidateStoredDataEvent>(_onValidateStoredDataEvent);
-      on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
-      on<NavigateToRegisterScreenEvent>(_onNavigateToRegisterEvent);
-    });
+      :  super(LoginInitial()) {
+    // on<ValidateEmailEvent>(_onValidateEmailEvent);
+    // on<ValidatePasswordEvent>(_onValidatePasswordEvent);
+    on<LoginButtonEvent>(_onLoginEvent);
+    on<CallApiLoginEvent>(_onCallApiLoginEvent);
+    on<ValidateStoredDataEvent>(_onValidateStoredDataEvent);
+    on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
+    on<NavigateToRegisterScreenEvent>(_onNavigateToRegisterEvent);
   }
-
   FutureOr<void> _onValidateStoredDataEvent(
       ValidateStoredDataEvent event, Emitter<LoginState> emit) async {
     // String? name = await prefManager.getUsername();
@@ -68,23 +65,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _onLoginEvent(
       LoginButtonEvent event, Emitter<LoginState> emit) async {
-    final validationsState = AuthValidationUseCase()
-        .validateFormUseCase(event.email, event.password);
-    if (validationsState.isNotEmpty) {
-      for (var element in validationsState) {
-        if (element == ValidationState.userNameEmpty) {
-          emit(EmailEmptyFormatState(emailValidatorMessage: "email_is_empty"));
-        } else if (element == ValidationState.passwordNumberEmpty) {
-          emit(PasswordEmptyFormatState(
-              passwordValidatorMessage: "password_is_empty"));
-        } else if (element == ValidationState.Formatting) {
-          emit(EmailEmptyFormatState(
-              emailValidatorMessage: "try_with_correct_username_password"));
-        }
-      }
-    } else {
+    // final validationsState = AuthValidationUseCase()
+    //     .validateFormUseCase(event.email, event.password);
+    // if (validationsState.isNotEmpty) {
+    //   for (var element in validationsState) {
+    //     if (element == ValidationState.userNameEmpty) {
+    //       emit(EmailEmptyFormatState(emailValidatorMessage: "email_is_empty"));
+    //     } else if (element == ValidationState.passwordNumberEmpty) {
+    //       emit(PasswordEmptyFormatState(
+    //           passwordValidatorMessage: "password_is_empty"));
+    //     } else if (element == ValidationState.Formatting) {
+    //       emit(EmailEmptyFormatState(
+    //           emailValidatorMessage: "try_with_correct_username_password"));
+    //     }
+    //   }
+    // } else {
       emit(ValidLoginFormState(event.email, event.password));
-    }
+    // }
   }
 
   FutureOr<void> _onCallApiLoginEvent(
@@ -104,12 +101,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     //   emit(NetworkErrorState(loginState.message));
     // }
 
-    final result = await _postLoginByEmailUseCase(
-        LoginRequest(email: event.email, password: event.password));
+    // final result = await _postLoginByEmailUseCase(
+    //     LoginRequest(email: event.email, password: event.password));
+    //
+    // result.fold((l) => emit(LoginFailState(l.message)), (r) {
+    //   // emit(LoginSuccessState());
+    // });
 
-    result.fold((l) => emit(LoginFailState(l.message)), (r) {
-      // emit(LoginSuccessState());
-    });
+          try {
+            // TODO : login fun ( emit state )
+            UserCredential? userCredentials = await FirebaseAuth.instance.signInWithEmailAndPassword(email: event.email, password: event.password);
+            emit(LoginSuccessState());
+          } on FirebaseAuthException catch (e) {
+            emit(NetworkErrorState(e.code));
+          }
   }
 
   FutureOr<void> _onNavigateToHomeEvent(

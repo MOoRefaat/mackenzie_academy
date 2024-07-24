@@ -23,17 +23,19 @@ class LoginScreen extends StatelessWidget {
           if (state is LoginInitial) {
             // TODO  : check if email and password is remembered
           }
-          if (state is EmailEmptyFormatState) {
-            _emailEmptyFormatState("translate(state.emailValidatorMessage)",context);
-          } else if (state is EmailFormatCorrectState) {
-            _emailFormatCorrectState();
-          } else if (state is PasswordEmptyFormatState) {
-            _passwordEmptyFormatState(
-                "translate(state.passwordValidatorMessage)",context
-            );
-          } else if (state is PasswordFormatCorrectState) {
-            _passwordFormatCorrectState();
-          } else if (state is NetworkErrorState) {
+          // if (state is EmailEmptyFormatState) {
+          //   _emailEmptyFormatState("translate(state.emailValidatorMessage)",context);
+          // } else if (state is EmailFormatCorrectState) {
+          //   _emailFormatCorrectState();
+          // } else if (state is PasswordEmptyFormatState) {
+          //   _passwordEmptyFormatState(
+          //       "translate(state.passwordValidatorMessage)",context
+          //   );
+          // }
+          // else if (state is PasswordFormatCorrectState) {
+          //   _passwordFormatCorrectState();
+          // }
+          else if (state is NetworkErrorState) {
             _failErrorMessage(errorMessage: "translate(state.message)",context: context);
           } else if (state is ValidLoginFormState) {
             _callApiLogin(state.email, state.password,context);

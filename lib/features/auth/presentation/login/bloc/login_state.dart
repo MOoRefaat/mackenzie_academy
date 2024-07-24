@@ -31,12 +31,12 @@ class ValidLoginFormState extends LoginState {
 class LoginLoadingState extends LoginState {}
 
 class LoginSuccessState extends LoginState {
-  final LoginResponse user;
-
-  LoginSuccessState(this.user);
-
-  @override
-  List<Object?> get props => [user];
+  // final LoginResponse user;
+  //
+  // LoginSuccessState(this.user);
+  //
+  // @override
+  // List<Object?> get props => [user];
 }
 
 class LoginFailState extends LoginState {
