@@ -23,7 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // on<ValidateEmailEvent>(_onValidateEmailEvent);
     // on<ValidatePasswordEvent>(_onValidatePasswordEvent);
     on<LoginButtonEvent>(_onLoginEvent);
-    on<CallApiLoginEvent>(_onCallApiLoginEvent);
+    on<CallFirebaseLoginEvent>(_onCallFirebaseLoginEvent);
     on<ValidateStoredDataEvent>(_onValidateStoredDataEvent);
     on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
     on<NavigateToRegisterScreenEvent>(_onNavigateToRegisterEvent);
@@ -84,8 +84,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // }
   }
 
-  FutureOr<void> _onCallApiLoginEvent(
-      CallApiLoginEvent event, Emitter<LoginState> emit) async {
+  FutureOr<void> _onCallFirebaseLoginEvent(
+      CallFirebaseLoginEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
 
     // TODO : caal repo

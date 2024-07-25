@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
 import 'package:mackenzie_academy/core/services/services_locator.dart';
+import 'package:mackenzie_academy/core/utils/loading_manager.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_button.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
@@ -11,7 +12,6 @@ import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bl
 class LoginScreen extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +36,13 @@ class LoginScreen extends StatelessWidget {
           //   _passwordFormatCorrectState();
           // }
           else if (state is NetworkErrorState) {
-            _failErrorMessage(errorMessage: "translate(state.message)",context: context);
+            _failErrorMessage(errorMessage: state.message,context: context);
           } else if (state is ValidLoginFormState) {
-            _callApiLogin(state.email, state.password,context);
+            _callFirebaseLogin(state.email, state.password,context);
           } else if (state is LoginLoadingState) {
             _loginLoadingState();
           } else if (state is LoginFailState) {
-            _failErrorMessage(errorMessage: "translate(state.messageKey)", context: context,);
+            _failErrorMessage(errorMessage: state.messageKey, context: context,);
           } else if (state is LoginSuccessState) {
             _loginSuccessState(context);
           } else if (state is NavigateToHomeScreenState) {
@@ -50,7 +50,6 @@ class LoginScreen extends StatelessWidget {
           } else if (state is NavigateToRegisterScreenState) {
             _navigateToRegister(context);
           }
-
         },
         builder: (context, state) {
           return _loginWidget(context: context);
@@ -175,11 +174,11 @@ class LoginScreen extends StatelessWidget {
 
   // states fun
   void _loginLoadingState() {
-    showLoading();
+    LoadingManager().showLoading();
   }
 
   void _emailEmptyFormatState(String errorMessage,BuildContext context) {
-    hideLoading();
+    LoadingManager().hideLoading();
     showDialog(
       context: context,
       builder: (context) {
@@ -203,7 +202,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   void _passwordEmptyFormatState(String errorMessage,BuildContext context) {
-    hideLoading();
+    LoadingManager().hideLoading();
     showDialog(
       context: context,
       builder: (context) {
@@ -226,17 +225,17 @@ class LoginScreen extends StatelessWidget {
     // passwordErrorMessage = "";
   }
 
-  void _callApiLogin(String email, String password,BuildContext context) {
-    BlocProvider.of<LoginBloc>(context).add(CallApiLoginEvent(email: email, password: password));
+  void _callFirebaseLogin(String email, String password,BuildContext context) {
+    BlocProvider.of<LoginBloc>(context).add(CallFirebaseLoginEvent(email: email, password: password));
   }
 
   void _loginSuccessState(BuildContext context) {
-    hideLoading();
+    LoadingManager().hideLoading();
     BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent());
   }
 
   void _failErrorMessage({required String errorMessage,required BuildContext context}) {
-    hideLoading();
+    LoadingManager().hideLoading();
     showDialog(
       context: context,
       builder: (context) {
@@ -256,90 +255,13 @@ class LoginScreen extends StatelessWidget {
   }
 
   void _navigateToHome(BuildContext context) {
-    hideLoading();
+    LoadingManager().hideLoading();
     Navigator.of(context).pushReplacementNamed(RoutesName.authPageRoute);
   }
 
   void _navigateToRegister(BuildContext context) {
-    hideLoading();
+    LoadingManager().hideLoading();
     Navigator.of(context).pushNamed(RoutesName.registerRoute);
   }
 
-  // TODO : Move to file LoadingManager
-  void changeState() {
-    // setState(() {});
-  }
-
-  void runChangeState() {
-    changeState();
-  }
-
-  void showLoading() async {
-    if (!isLoading) {
-      isLoading = true;
-      runChangeState();
-    }
-  }
-
-  void hideLoading() async {
-    if (isLoading) {
-      isLoading = false;
-      runChangeState();
-    }
-  }
-
-  Widget loadingManagerWidget() {
-    if (isLoading) {
-      return customLoadingWidget();
-    } else {
-      return getEmptyWidget();
-    }
-  }
-
-  Widget customLoadingWidget() {
-    return FullScreenLoaderWidget.onlyAnimation();
-  }
-
-  Widget getEmptyWidget() {
-    return const SizedBox.shrink();
-  }
-
-
-}
-// TODO : Move to file custom Widget
-class FullScreenLoaderWidget extends StatelessWidget {
-  final String? message;
-
-  const FullScreenLoaderWidget({super.key, this.message});
-
-  factory FullScreenLoaderWidget.onlyAnimation() {
-    return const FullScreenLoaderWidget();
-  }
-
-  factory FullScreenLoaderWidget.message(String message) {
-    return FullScreenLoaderWidget(message: message);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    return Container(
-      color: theme.primaryColor.withOpacity(0.10),
-      child: Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
-        ),
-      ),
-    );
-  }
-
-  Widget txtWithLoading(Color color) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(width: 20),
-        Text(message ?? "", style: TextStyle(fontSize: 25, color: color))
-      ],
-    );
-  }
 }

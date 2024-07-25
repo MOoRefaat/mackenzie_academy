@@ -1,340 +1,58 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:mackenzie_academy/core/router/routes_name.dart';
-// import 'package:mackenzie_academy/core/widgets/component/custom_dialog.dart';
-// import 'package:mackenzie_academy/features/auth/presentation/login/auth.dart';
-//
-// class RegisterScreen extends StatefulWidget {
-//   // void Function()? onTap;
-//   RegisterScreen({super.key,
-//     // required this.onTap
-//   });
-//
-//   @override
-//   State<RegisterScreen> createState() => _RegisterScreenState();
-// }
-//
-// class _RegisterScreenState extends State<RegisterScreen> {
-//   TextEditingController userNameController = TextEditingController();
-//
-//   TextEditingController passwordController = TextEditingController();
-//
-//   TextEditingController confirmPasswordController = TextEditingController();
-//
-//   TextEditingController emailController = TextEditingController();
-//
-//   Future<void> createUserDocument(UserCredential? userCredential) async {
-//     if (userCredential != null && userCredential.user != null) {
-//       try {
-//         await FirebaseFirestore.instance
-//             .collection("Users")
-//             .doc(userCredential.user!.uid)
-//             .set({
-//           "email": userCredential.user!.email,
-//           'userName': userNameController.text,
-//           'role': 'User'
-//         });
-//         print("User document created successfully");
-//       } catch (e) {
-//         print("Failed to create user document: $e");
-//       }
-//     }
-//   }
-//
-//   void register() async {
-//     showDialog(
-//         context: context,
-//         builder: (context) => const Center(
-//           child: CircularProgressIndicator(),
-//         ));
-//     if (passwordController.text != confirmPasswordController.text) {
-//       Navigator.pop(context);
-//       displayMessageToUser("Passwords Don't Match", context);
-//     } else {
-//       try {
-//         UserCredential? userCredentials = await FirebaseAuth.instance
-//             .createUserWithEmailAndPassword(
-//             email: emailController.text, password: passwordController.text);
-//         createUserDocument(userCredentials);
-//         Navigator.pop(context);
-//         Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
-//       } on FirebaseAuthException catch (e) {
-//         Navigator.pop(context);
-//         displayMessageToUser(e.code, context);
-//       }
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Color(0xFF0A155A),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: <Widget>[
-//             // Logo
-//             Image.asset('assets/images/logo2.png', height: 200.0),
-//             const SizedBox(height: 20),
-//             // Username TextField
-//             Directionality(
-//               textDirection: TextDirection.rtl,
-//               child: TextField(
-//                 controller: userNameController,
-//                 decoration: InputDecoration(
-//                   hintText: 'اسم المستخدم',
-//                   hintStyle: TextStyle(color: Colors.white),
-//                   prefixIcon: Icon(Icons.person, color: Colors.white),
-//                   filled: true,
-//                   fillColor: Colors.white.withOpacity(0.1),
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(10.0),
-//                   ),
-//                 ),
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             Directionality(
-//               textDirection: TextDirection.rtl,
-//               child: TextField(
-//                 controller: emailController,
-//                 decoration: InputDecoration(
-//                   hintText: 'البريد الإلكتروني',
-//                   hintStyle: TextStyle(color: Colors.white),
-//                   prefixIcon: Icon(Icons.person, color: Colors.white),
-//                   filled: true,
-//                   fillColor: Colors.white.withOpacity(0.1),
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(10.0),
-//                   ),
-//                 ),
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             // Password TextField
-//             Directionality(
-//               textDirection: TextDirection.rtl,
-//               child: TextField(
-//                 controller: passwordController,
-//                 obscureText: true,
-//                 decoration: InputDecoration(
-//                   hintText: 'كلمة المرور',
-//                   hintStyle: TextStyle(color: Colors.white),
-//                   prefixIcon: Icon(Icons.lock, color: Colors.white),
-//                   suffixIcon: Icon(Icons.visibility, color: Colors.white),
-//                   filled: true,
-//                   fillColor: Colors.white.withOpacity(0.1),
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(10.0),
-//                   ),
-//                 ),
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             Directionality(
-//               textDirection: TextDirection.rtl,
-//               child: TextField(
-//                 controller: confirmPasswordController,
-//                 obscureText: true,
-//                 decoration: InputDecoration(
-//                   hintText: 'تأكيد كلمة المرور',
-//                   hintStyle: TextStyle(color: Colors.white),
-//                   prefixIcon: Icon(Icons.lock, color: Colors.white),
-//                   suffixIcon: Icon(Icons.visibility, color: Colors.white),
-//                   filled: true,
-//                   fillColor: Colors.white.withOpacity(0.1),
-//                   border: OutlineInputBorder(
-//                     borderRadius: BorderRadius.circular(10.0),
-//                   ),
-//                 ),
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             // Login Button
-//             ElevatedButton(
-//               onPressed: () {
-//                 register();
-//               },
-//               // onPressed: () async {
-//               //   if (emailController.text.isEmpty ||
-//               //       passwordController.text.isEmpty) {
-//               //     AlertDialog(title: Text("Email and password cannot be empty"));
-//               //     return;
-//               //   }
-//               //   if (confirmPasswordController.text.isEmpty ||
-//               //       passwordController.text != confirmPasswordController.text) {
-//               //     AlertDialog(title: Text("confirm password does not match"));
-//               //     return;
-//               //   }
-//               //   try {
-//               //     final user = await AuthHelper.signupWithEmail(
-//               //         email: emailController.text,
-//               //         password: passwordController.text);
-//               //     createUserDocument(user);
-//               //     if (user != null) {
-//               //       AlertDialog(title: Text("signup successful"));
-//               //       Navigator.pop(context);
-//               //     }
-//               //   } catch (e) {
-//               //     print(e);
-//               //   }
-//               // },
-//               style: ElevatedButton.styleFrom(
-//                 foregroundColor: Color(0xFF0A155A),
-//                 backgroundColor: Colors.white, // foreground
-//                 minimumSize: Size(double.infinity, 50),
-//                 shape: RoundedRectangleBorder(
-//                   borderRadius: BorderRadius.circular(10.0),
-//                 ),
-//               ),
-//               child: const Text('تسجيل الدخول'),
-//             ),
-//             SizedBox(height: 20),
-//
-//             // Sign up text
-//             GestureDetector(
-//               // onTap: widget.onTap,
-//               child: const Text(
-//                 'لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
-//                 style: TextStyle(color: Colors.white),
-//               ),
-//             ),
-//             const SizedBox(height: 20),
-//
-//             // Social Media Login Buttons
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: <Widget>[
-//                 Container(
-//                   width: 52.0,
-//                   height: 52.0,
-//                   decoration: const BoxDecoration(
-//                     shape: BoxShape.circle,
-//                     color: Color(0xFFECE9EC),
-//                   ),
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(
-//                         12.0), // Adjust the padding as needed
-//                     child: ClipOval(
-//                       child: Image.asset('assets/images/googleLogo.png',
-//                           fit: BoxFit.cover),
-//                     ),
-//                   ),
-//                 ),
-//                 IconButton(
-//                   icon: Image.asset(
-//                       'assets/images/AppleLogo.png'), // Replace with your Google logo asset
-//                   iconSize: 50,
-//                   onPressed: () {
-//                     // Handle Apple login
-//                   },
-//                 ),
-//                 Container(
-//                   width: 52.0,
-//                   height: 52.0,
-//                   decoration: const BoxDecoration(
-//                     shape: BoxShape.circle,
-//                     color: Color(0xFFECE9EC),
-//                   ),
-//                   child: IconButton(
-//                     icon: Icon(Icons.phone, color: Colors.black87, size: 28),
-//                     onPressed: () {
-//                       // Handle Phone login
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/core/services/services_locator.dart';
+import 'package:mackenzie_academy/core/utils/loading_manager.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
-import 'package:mackenzie_academy/core/widgets/component/custom_dialog.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:mackenzie_academy/core/router/routes_name.dart';
-import 'package:mackenzie_academy/core/widgets/component/custom_dialog.dart';
+import 'package:mackenzie_academy/core/widgets/component/custom_button.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
+import 'package:mackenzie_academy/features/auth/presentation/register/bloc/register_bloc.dart';
 
-class RegisterScreen extends StatefulWidget {
-  RegisterScreen({Key? key}) : super(key: key);
-
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
+class RegisterScreen extends StatelessWidget {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  Future<void> createUserDocument(UserCredential? userCredential) async {
-    if (userCredential != null && userCredential.user != null) {
-      try {
-        await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(userCredential.user!.uid)
-            .set({
-          "email": userCredential.user!.email,
-          'userName': userNameController.text,
-          'role': 'User'
-        });
-        print("User document created successfully");
-      } catch (e) {
-        print("Failed to create user document: $e");
-      }
-    }
-  }
-
-  void register() async {
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-    if (passwordController.text != confirmPasswordController.text) {
-      Navigator.pop(context);
-      displayMessageToUser("Passwords Don't Match", context);
-    } else {
-      try {
-        UserCredential? userCredentials = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-        createUserDocument(userCredentials);
-        Navigator.pop(context);
-        Navigator.of(context).pushReplacementNamed(RoutesName.loginRoute);
-      } on FirebaseAuthException catch (e) {
-        Navigator.pop(context);
-        displayMessageToUser(e.code, context);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => servicesLocator<RegisterBloc>(),
+      child: BlocConsumer<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+          if (state is RegisterInitial) {
+            // TODO  : check if email and password is remembered
+          }
+          if (state is RegisterFailState) {
+            _failErrorMessage(errorMessage: state.message, context: context);
+          } else if (state is PasswordMatchState) {
+            _checkValidRegisterFormState(context);
+          } else if (state is PasswordNotMatchState) {
+            _failErrorMessage(errorMessage: state.message, context: context);
+          } else if (state is ValidRegisterFormState) {
+            _callFirebaseRegister(
+                state.email, state.password, state.userName, context);
+          } else if (state is RegisterLoadingState) {
+            _registerLoadingState();
+          } else if (state is RegisterSuccessState) {
+            _registerSuccessState(context);
+          } else if (state is NavigateToHomeScreenState) {
+            _navigateToHome(context);
+          }
+        },
+        builder: (context, state) {
+          return _registerWidget(context: context);
+        },
+      ),
+    );
+  }
+
+  Widget _registerWidget({required BuildContext context}) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.blue20,
-        iconTheme: IconThemeData(color: AppColors.white), // Set back button color to white
+        iconTheme: IconThemeData(
+            color: AppColors.white), // Set back button color to white
       ),
       backgroundColor: AppColors.blue20,
       body: SingleChildScrollView(
@@ -357,29 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _buildPasswordTextField(),
             const SizedBox(height: 20),
             // Register Button
-            ElevatedButton(
-              onPressed: () {
-                register();
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Color(0xFF0A155A),
-                backgroundColor: Colors.white, // foreground
-                minimumSize: Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text('تسجيل الدخول'),
-            ),
-            const SizedBox(height: 20),
-            // Sign up text
-            GestureDetector(
-              // onTap: widget.onTap,
-              child: const Text(
-                'لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            _buildRegisterButton(context),
             const SizedBox(height: 20),
             // Social Media Login Buttons
             _buildSocialMediaLoginButtons(),
@@ -416,7 +112,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       prefixIcon: Icons.lock,
       isPasswordField: true,
     );
-
   }
 
   Widget _buildPasswordTextField() {
@@ -426,7 +121,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       prefixIcon: Icons.lock,
       isPasswordField: true,
     );
-
   }
 
   Widget _buildSocialMediaLoginButtons() {
@@ -443,7 +137,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: ClipOval(
-              child: Image.asset('assets/images/googleLogo.png', fit: BoxFit.cover),
+              child: Image.asset('assets/images/googleLogo.png',
+                  fit: BoxFit.cover),
             ),
           ),
         ),
@@ -470,5 +165,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-}
+  Widget _buildRegisterButton(BuildContext context) {
+    return CustomButton(
+      buttonLabelText: 'إنشاء حساب',
+      buttonLabelStyle: TextStyle(color: AppColors.blue20),
+      backgroundColor: AppColors.white,
+      onPress: () {
+        BlocProvider.of<RegisterBloc>(context).add(IsPasswordMatchEvent(
+          password: passwordController.text,
+          confirmPassword: confirmPasswordController.text,
+        ));
+      },
+    );
+  }
 
+  // states fun
+  void _callFirebaseRegister(
+      String email, String password, String userName, BuildContext context) {
+    BlocProvider.of<RegisterBloc>(context).add(CallFirebaseRegisterEvent(
+        email: email, password: password, userName: userName));
+  }
+
+  void _checkValidRegisterFormState(BuildContext context) {
+    BlocProvider.of<RegisterBloc>(context).add(RegisterButtonEvent(
+      email: emailController.text,
+      password: passwordController.text,
+      userName: userNameController.text,
+    ));
+  }
+
+  void _registerLoadingState() {}
+
+  void _registerSuccessState(BuildContext context) {
+    LoadingManager().hideLoading();
+    BlocProvider.of<RegisterBloc>(context).add(NavigateToHomeScreenEvent());
+  }
+
+  void _failErrorMessage(
+      {required String errorMessage, required BuildContext context}) {
+    LoadingManager().hideLoading();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("${errorMessage}"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _navigateToHome(BuildContext context) {
+    LoadingManager().hideLoading();
+    Navigator.of(context).pushNamed(RoutesName.loginRoute);
+  }
+}

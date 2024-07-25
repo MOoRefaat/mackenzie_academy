@@ -36,12 +36,12 @@ class LoginButtonEvent extends LoginEvent {
   List<Object?> get props => [email, password];
 }
 
-// Api's call
-class CallApiLoginEvent extends LoginEvent {
+// Firebase's call
+class CallFirebaseLoginEvent extends LoginEvent {
   final String email;
   final String password;
 
-  CallApiLoginEvent({required this.email, required this.password});
+  CallFirebaseLoginEvent({required this.email, required this.password});
 
   @override
   List<Object?> get props => [email, password];
@@ -59,17 +59,3 @@ class NavigateHomeScreenEvent extends LoginEvent {
   List<Object?> get props => throw UnimplementedError();
 }
 
-// class NavigateToUserHomeScreenEvent extends LoginEvent {
-//   @override
-//   List<Object?> get props => throw UnimplementedError();
-// }
-//
-// class NavigateToAdminHomeScreenEvent extends LoginEvent {
-//   @override
-//   List<Object?> get props => throw UnimplementedError();
-// }
-//
-// class NavigateToCoachHomeScreenEvent extends LoginEvent {
-//   @override
-//   List<Object?> get props => throw UnimplementedError();
-// }

@@ -6,6 +6,7 @@ import 'package:mackenzie_academy/features/auth/domain/repositories/auth_reposit
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_login.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_register.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
+import 'package:mackenzie_academy/features/auth/presentation/register/bloc/register_bloc.dart';
 
 final servicesLocator = GetIt.instance;
 
@@ -14,6 +15,7 @@ class ServicesLocator {
     // Bloc
     servicesLocator.registerLazySingleton(
             () => LoginBloc(servicesLocator(),servicesLocator()));
+    servicesLocator.registerLazySingleton(() => RegisterBloc());
 
     /// Remote Use Cases
     servicesLocator.registerLazySingleton(
