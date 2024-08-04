@@ -7,6 +7,7 @@ import 'package:mackenzie_academy/core/utils/theme/color.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_button.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
+import 'package:mackenzie_academy/features/home/data/models/users_services.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -256,7 +257,7 @@ class LoginScreen extends StatelessWidget {
 
   void _navigateToHome(BuildContext context) {
     LoadingManager().hideLoading();
-    Navigator.of(context).pushReplacementNamed(RoutesName.authPageRoute);
+    Navigator.of(context).pushReplacementNamed(RoutesName.homeRoute);
   }
 
   void _navigateToRegister(BuildContext context) {

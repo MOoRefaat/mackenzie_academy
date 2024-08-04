@@ -194,7 +194,9 @@ class RegisterScreen extends StatelessWidget {
     ));
   }
 
-  void _registerLoadingState() {}
+  void _registerLoadingState() {
+    LoadingManager().showLoading();
+  }
 
   void _registerSuccessState(BuildContext context) {
     LoadingManager().hideLoading();
@@ -224,6 +226,6 @@ class RegisterScreen extends StatelessWidget {
 
   void _navigateToHome(BuildContext context) {
     LoadingManager().hideLoading();
-    Navigator.of(context).pushNamed(RoutesName.loginRoute);
+    Navigator.of(context).pushNamed(RoutesName.authPageRoute);
   }
 }
