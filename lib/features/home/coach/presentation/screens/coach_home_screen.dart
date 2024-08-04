@@ -62,6 +62,10 @@ class CoachHomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              Center(
+                child: const Text('Coach Screen',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+              ),
               const Text('الخدمات',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               Align(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
+import 'package:mackenzie_academy/features/add_users_by_admin/presentation/register/screens/adding_users-screen.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/auth.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
 import 'package:mackenzie_academy/features/auth/presentation/register/screens/register_screen.dart';
@@ -24,6 +25,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => UserHomeScreen());
       case RoutesName.authPageRoute:
         return MaterialPageRoute(builder: (_) => AuthPage());
+        case RoutesName.addingUsersRoute:
+        return MaterialPageRoute(builder: (_) => AddingUsersScreen());
     }
   }
 }

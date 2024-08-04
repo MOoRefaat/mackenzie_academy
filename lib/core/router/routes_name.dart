@@ -10,5 +10,6 @@ class RoutesName {
 
   // TODO : it's be deleted and handle the logic in bloc
   static const String authPageRoute = '/auth-page';
+  static const String addingUsersRoute = '/adding-users-screen';
 
 }

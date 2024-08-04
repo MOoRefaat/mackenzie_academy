@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mackenzie_academy/core/router/routes_name.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   AdminHomeScreen({super.key});
@@ -25,7 +26,13 @@ class AdminHomeScreen extends StatelessWidget {
                   logout();
                 },
                 child:
-                    const Text("Log OUT", style: TextStyle(color: Colors.red)))
+                    const Text("Log OUT", style: TextStyle(color: Colors.red))),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, RoutesName.addingUsersRoute);
+                },
+                child:
+                const Text("Go to add users", style: TextStyle(color: Colors.blue)))
           ],
         ),
       ),
