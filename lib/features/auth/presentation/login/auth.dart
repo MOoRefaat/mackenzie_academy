@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
-import 'package:mackenzie_academy/features/home/admin/presentation/screens/admin_home_screen.dart';
-import 'package:mackenzie_academy/features/home/user/presentation/screens/user_home_screen.dart';
+import 'package:mackenzie_academy/features/home/t/admin/presentation/screens/admin_home_screen.dart';
+import 'package:mackenzie_academy/features/home/t/user/presentation/screens/user_home_screen.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});

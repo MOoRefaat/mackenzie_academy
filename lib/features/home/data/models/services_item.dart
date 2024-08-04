@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 class ServicesItem {
   final String title;
+  final String? routeName;
   final IconData icon;
 
-  ServicesItem({required this.title, required this.icon});
+  ServicesItem({required this.title, required this.icon,this.routeName});
 }
 
 List<ServicesItem> userServicesItem = [
