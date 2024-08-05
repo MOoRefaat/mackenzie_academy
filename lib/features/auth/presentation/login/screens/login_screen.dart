@@ -37,6 +37,7 @@ class LoginScreen extends StatelessWidget {
           //   _passwordFormatCorrectState();
           // }
           else if (state is NetworkErrorState) {
+            print("&&&&&&&&& ${state.message}");
             _failErrorMessage(errorMessage: state.message,context: context);
           } else if (state is ValidLoginFormState) {
             _callFirebaseLogin(state.email, state.password,context);
@@ -257,7 +258,7 @@ class LoginScreen extends StatelessWidget {
 
   void _navigateToHome(BuildContext context) {
     LoadingManager().hideLoading();
-    Navigator.of(context).pushReplacementNamed(RoutesName.homeRoute);
+    Navigator.of(context).pushNamed(RoutesName.homeRoute);
   }
 
   void _navigateToRegister(BuildContext context) {

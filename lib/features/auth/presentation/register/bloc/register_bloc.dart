@@ -37,9 +37,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(RegisterLoadingState());
     try {
       // TODO : login fun ( emit state )
-      UserCredential? userCredentials = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: event.email, password: event.password);
+      UserCredential? userCredentials = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: event.email, password: event.password);
       createUserDocument(userCredentials, event.email);
       emit(RegisterSuccessState());
     } on FirebaseAuthException catch (e) {
