@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/core/utils/validator.dart';
@@ -112,6 +113,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             // TODO : login fun ( emit state )
             UserCredential? userCredentials = await FirebaseAuth.instance.signInWithEmailAndPassword(email: event.email, password: event.password);
             emit(LoginSuccessState());
+            print("userCredentials ${userCredentials.user}");
+            final userType = getUserStream(userCredentials.user!.uid);
+            print("userType ${userType}");
+            await for (var userDoc in userType) {
+              if (userDoc.exists) {
+                print("userDoc ${userDoc}");
+              } else {
+                print("userDoc no");
+              }
+            }
           } on FirebaseAuthException catch (e) {
             emit(NetworkErrorState(e.code));
           }
@@ -126,4 +137,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       NavigateToRegisterScreenEvent event, Emitter<LoginState> emit) {
     emit(NavigateToRegisterScreenState());
   }
+
+  Stream<DocumentSnapshot> getUserStream(String uid) {
+    return FirebaseFirestore.instance.collection('Users').doc(uid).snapshots();
+  }
+  Future<DocumentSnapshot> getUser(String uid) {
+    return FirebaseFirestore.instance.collection('Users').doc(uid).get();
+  }
+
 }
