@@ -226,6 +226,6 @@ class RegisterScreen extends StatelessWidget {
 
   void _navigateToHome(BuildContext context) {
     LoadingManager().hideLoading();
-    Navigator.of(context).pushNamed(RoutesName.authPageRoute);
+    Navigator.of(context).pushNamed(RoutesName.homeRoute);
   }
 }

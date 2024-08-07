@@ -105,7 +105,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 // todo : usersServices?.servicesList.isNotEmpty ?
-
                 _buildServiceList(services.servicesList),
                 SizedBox(height: 20),
                 const Text('العروض',
