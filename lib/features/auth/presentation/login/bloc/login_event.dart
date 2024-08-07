@@ -55,7 +55,11 @@ class NavigateToRegisterScreenEvent extends LoginEvent {
 }
 
 class NavigateHomeScreenEvent extends LoginEvent {
+  final UserType userType;
+
+  NavigateHomeScreenEvent({required this.userType});
+
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [userType];
 }
 

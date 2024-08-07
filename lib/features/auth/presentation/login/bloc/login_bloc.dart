@@ -9,6 +9,7 @@ import 'package:mackenzie_academy/features/auth/data/models/login_request.dart';
 import 'package:mackenzie_academy/features/auth/data/models/login_response.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/auth_validation_usecase.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_login.dart';
+import 'package:mackenzie_academy/features/home/data/models/users_services.dart';
 import 'package:meta/meta.dart';
 
 part 'login_event.dart';
@@ -20,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final SharedPreferenceManager sharedPreferenceManager;
 
   LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager)
-      :  super(LoginInitial()) {
+      : super(LoginInitial()) {
     // on<ValidateEmailEvent>(_onValidateEmailEvent);
     // on<ValidatePasswordEvent>(_onValidatePasswordEvent);
     on<LoginButtonEvent>(_onLoginEvent);
@@ -29,6 +30,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<NavigateHomeScreenEvent>(_onNavigateToHomeEvent);
     on<NavigateToRegisterScreenEvent>(_onNavigateToRegisterEvent);
   }
+
   FutureOr<void> _onValidateStoredDataEvent(
       ValidateStoredDataEvent event, Emitter<LoginState> emit) async {
     // String? name = await prefManager.getUsername();
@@ -81,56 +83,37 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     //     }
     //   }
     // } else {
-      emit(ValidLoginFormState(event.email, event.password));
+    emit(ValidLoginFormState(event.email, event.password));
     // }
   }
 
   FutureOr<void> _onCallFirebaseLoginEvent(
       CallFirebaseLoginEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
-
-    // TODO : caal repo
-    // LoginState? loginState = await _postLoginByEmailUseCase;
-
-    // if (loginState is LoginSuccessState) {
-    //   // sharedPreferenceManager.setUsername(event.userName);
-    //   // sharedPreferenceManager.setUserPassword(event.password);
-    //   emit(LoginSuccessState(loginState.user));
-    // } else if (loginState is LoginFailState) {
-    //   emit(LoginFailState(loginState.messageKey));
-    // } else if (loginState is NetworkErrorState) {
-    //   emit(NetworkErrorState(loginState.message));
-    // }
-
-    // final result = await _postLoginByEmailUseCase(
-    //     LoginRequest(email: event.email, password: event.password));
-    //
-    // result.fold((l) => emit(LoginFailState(l.message)), (r) {
-    //   // emit(LoginSuccessState());
-    // });
-
-          try {
-            // TODO : login fun ( emit state )
-            UserCredential? userCredentials = await FirebaseAuth.instance.signInWithEmailAndPassword(email: event.email, password: event.password);
-            emit(LoginSuccessState());
-            print("userCredentials ${userCredentials.user}");
-            final userType = getUserStream(userCredentials.user!.uid);
-            print("userType ${userType}");
-            await for (var userDoc in userType) {
-              if (userDoc.exists) {
-                print("userDoc ${userDoc}");
-              } else {
-                print("userDoc no");
-              }
-            }
-          } on FirebaseAuthException catch (e) {
-            emit(NetworkErrorState(e.code));
-          }
+    try {
+      UserCredential? userCredentials = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: event.email, password: event.password);
+      final userType = getUserStream(userCredentials.user!.uid);
+      await for (var userDoc in userType) {
+        if (userDoc.exists) {
+          final Map<String, dynamic> userData =
+              userDoc.data() as Map<String, dynamic>;
+          final String role = userData['role'];
+          print("User role: $role");
+          emit(LoginSuccessState(role));
+        } else {
+          print("userDoc no");
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      emit(NetworkErrorState(e.code));
+    }
   }
 
   FutureOr<void> _onNavigateToHomeEvent(
       NavigateHomeScreenEvent event, Emitter<LoginState> emit) {
-    emit(NavigateToHomeScreenState());
+    emit(NavigateToHomeScreenState(event.userType));
   }
 
   FutureOr<void> _onNavigateToRegisterEvent(
@@ -141,8 +124,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<DocumentSnapshot> getUserStream(String uid) {
     return FirebaseFirestore.instance.collection('Users').doc(uid).snapshots();
   }
+
   Future<DocumentSnapshot> getUser(String uid) {
     return FirebaseFirestore.instance.collection('Users').doc(uid).get();
   }
-
 }

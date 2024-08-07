@@ -46,9 +46,9 @@ class LoginScreen extends StatelessWidget {
           } else if (state is LoginFailState) {
             _failErrorMessage(errorMessage: state.messageKey, context: context,);
           } else if (state is LoginSuccessState) {
-            _loginSuccessState(context);
+            _loginSuccessState(context,state.userRole);
           } else if (state is NavigateToHomeScreenState) {
-            _navigateToHome(context);
+            _navigateToHome(context,state.userType);
           } else if (state is NavigateToRegisterScreenState) {
             _navigateToRegister(context);
           }
@@ -231,9 +231,16 @@ class LoginScreen extends StatelessWidget {
     BlocProvider.of<LoginBloc>(context).add(CallFirebaseLoginEvent(email: email, password: password));
   }
 
-  void _loginSuccessState(BuildContext context) {
+  void _loginSuccessState(BuildContext context, String? role) {
     LoadingManager().hideLoading();
-    BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent());
+    print("I'm in screen $role");
+    if(role == 'Admin') {
+      BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent(userType: UserType.admin));
+    } else if (role == 'Coach') {
+      BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent(userType: UserType.coach));
+    } else {
+      BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent(userType: UserType.user));
+    }
   }
 
   void _failErrorMessage({required String errorMessage,required BuildContext context}) {
@@ -256,9 +263,16 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void _navigateToHome(BuildContext context) {
+  void _navigateToHome(BuildContext context, UserType userType) {
     LoadingManager().hideLoading();
-    Navigator.of(context).pushNamed(RoutesName.homeRoute);
+    if (userType == UserType.admin) {
+      Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: adminServices);
+    } else if (userType == UserType.coach) {
+      Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: coachServices);
+    } else {
+      print("object ${userServices.servicesList[0].title}");
+      Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: userServices);
+    }
   }
 
   void _navigateToRegister(BuildContext context) {

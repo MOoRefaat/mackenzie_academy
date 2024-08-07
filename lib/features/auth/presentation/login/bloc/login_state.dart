@@ -31,12 +31,12 @@ class ValidLoginFormState extends LoginState {
 class LoginLoadingState extends LoginState {}
 
 class LoginSuccessState extends LoginState {
-  // final LoginResponse user;
-  //
-  // LoginSuccessState(this.user);
-  //
-  // @override
-  // List<Object?> get props => [user];
+  final String userRole;
+
+  LoginSuccessState(this.userRole);
+
+  @override
+  List<Object?> get props => [userRole];
 }
 
 class LoginFailState extends LoginState {
@@ -60,4 +60,11 @@ class NetworkErrorState extends LoginState {
 // navigate
 class NavigateToRegisterScreenState extends LoginState {}
 
-class NavigateToHomeScreenState extends LoginState {}
+class NavigateToHomeScreenState extends LoginState {
+  final UserType userType;
+
+  NavigateToHomeScreenState(this.userType);
+
+  @override
+  List<Object?> get props => [userType];
+}

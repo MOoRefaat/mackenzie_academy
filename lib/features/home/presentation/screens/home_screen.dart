@@ -14,9 +14,10 @@ import 'package:mackenzie_academy/features/home/presentation/bloc/home_bloc.dart
 import 'package:mackenzie_academy/features/service_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UsersServices? usersServices;
+  late final args;
+   // UsersServices? usersServices;
 
-  HomeScreen({super.key, this.usersServices});
+  // HomeScreen({super.key, this.usersServices});
 
   // UsersServices
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -31,6 +32,7 @@ class HomeScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is HomeInitial) {
             // TODO  : check if email and password is remembered
+
           } else if (state is LogoutLoadingState) {
             _loadingState();
           } else if (state is LogoutSuccessState) {
@@ -42,6 +44,7 @@ class HomeScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          args = ModalRoute.of(context)!.settings.arguments as UsersServices;
           return _homeWidget(context);
         },
       ),
@@ -84,7 +87,7 @@ class HomeScreen extends StatelessWidget {
         endDrawer: _buildDrawer(context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: (usersServices != null && usersServices!.servicesList.isNotEmpty)
+          child: (args != null && args!.servicesList.isNotEmpty)
           ? SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -136,7 +139,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           )
-              : Text("Something wrong"),
+              : Text("Something wrong ${args}"),
         ),
       );
   }
@@ -264,8 +267,8 @@ class HomeScreen extends StatelessWidget {
           cardIcon: servicesList[index].icon,
         );
 
-        _buildServiceCard(context, usersServices!.servicesList[index].title,
-            usersServices!.servicesList[index].icon);
+        _buildServiceCard(context, args!.servicesList[index].title,
+            args!.servicesList[index].icon);
       },
     );
   }
