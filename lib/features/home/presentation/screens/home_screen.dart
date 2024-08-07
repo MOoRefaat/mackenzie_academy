@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
 import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/loading_manager.dart';
+import 'package:mackenzie_academy/core/utils/validator.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_card.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
 import 'package:mackenzie_academy/features/home/data/models/services_item.dart';
@@ -14,10 +15,10 @@ import 'package:mackenzie_academy/features/home/presentation/bloc/home_bloc.dart
 import 'package:mackenzie_academy/features/service_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  late final args;
-   // UsersServices? usersServices;
+  final UsersServices? usersServices;
 
-  // HomeScreen({super.key, this.usersServices});
+  HomeScreen({Key? key, this.usersServices}) : super(key: key);
+
 
   // UsersServices
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -44,13 +45,12 @@ class HomeScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          args = ModalRoute.of(context)!.settings.arguments as UsersServices;
-          return _homeWidget(context);
+          return _homeWidget(context,usersServices);
         },
       ),
     );
   }
-  Widget _homeWidget (BuildContext context) {
+  Widget _homeWidget (BuildContext context, UsersServices? services) {
     return
       Scaffold(
         key: _scaffoldKey,
@@ -87,7 +87,7 @@ class HomeScreen extends StatelessWidget {
         endDrawer: _buildDrawer(context),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: (args != null && args!.servicesList.isNotEmpty)
+          child: ( services != null && services!.servicesList.isNotEmpty)
           ? SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -106,7 +106,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 // todo : usersServices?.servicesList.isNotEmpty ?
 
-                _buildServiceList(userServices.servicesList),
+                _buildServiceList(services.servicesList),
                 SizedBox(height: 20),
                 const Text('العروض',
                     style: TextStyle(
@@ -139,7 +139,7 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           )
-              : Text("Something wrong ${args}"),
+              : Text("Something wrong ${services}"),
         ),
       );
   }
@@ -265,10 +265,17 @@ class HomeScreen extends StatelessWidget {
         return CustomCard(
           cardLabelText: servicesList[index].title,
           cardIcon: servicesList[index].icon,
+          onPress: (){
+            if (servicesList[index].routeName == null) {
+              Navigator.of(context).pushNamed(servicesList[index].routeName!);
+            } else {
+              print("object");
+            }
+          },
         );
 
-        _buildServiceCard(context, args!.servicesList[index].title,
-            args!.servicesList[index].icon);
+        // _buildServiceCard(context, args!.servicesList[index].title,
+        //     args!.servicesList[index].icon);
       },
     );
   }

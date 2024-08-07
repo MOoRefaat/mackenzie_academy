@@ -9,7 +9,6 @@ import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart'
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
 import 'package:mackenzie_academy/features/home/data/models/users_services.dart';
 
-
 class LoginScreen extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -20,7 +19,6 @@ class LoginScreen extends StatelessWidget {
       create: (context) => servicesLocator<LoginBloc>(),
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
-
           if (state is LoginInitial) {
             // TODO  : check if email and password is remembered
           }
@@ -38,17 +36,20 @@ class LoginScreen extends StatelessWidget {
           // }
           else if (state is NetworkErrorState) {
             print("&&&&&&&&& ${state.message}");
-            _failErrorMessage(errorMessage: state.message,context: context);
+            _failErrorMessage(errorMessage: state.message, context: context);
           } else if (state is ValidLoginFormState) {
-            _callFirebaseLogin(state.email, state.password,context);
+            _callFirebaseLogin(state.email, state.password, context);
           } else if (state is LoginLoadingState) {
             _loginLoadingState();
           } else if (state is LoginFailState) {
-            _failErrorMessage(errorMessage: state.messageKey, context: context,);
+            _failErrorMessage(
+              errorMessage: state.messageKey,
+              context: context,
+            );
           } else if (state is LoginSuccessState) {
-            _loginSuccessState(context,state.userRole);
+            _loginSuccessState(context, state.userRole);
           } else if (state is NavigateToHomeScreenState) {
-            _navigateToHome(context,state.userType);
+            _navigateToHome(context, state.userType);
           } else if (state is NavigateToRegisterScreenState) {
             _navigateToRegister(context);
           }
@@ -80,7 +81,8 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  BlocProvider.of<LoginBloc>(context).add(NavigateToRegisterScreenEvent());
+                  BlocProvider.of<LoginBloc>(context)
+                      .add(NavigateToRegisterScreenEvent());
                 },
                 child: const Text(
                   'ليس لديك حساب ؟ انضم إلينا أو المتابعه كزائر',
@@ -98,7 +100,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _buildLogo() {
     return Image.asset('assets/images/logo2.png', height: 200.0);
-      //SvgPicture.asset(AssetCatalog.mackenzie_logo,height: 139,width: 138,);
+    //SvgPicture.asset(AssetCatalog.mackenzie_logo,height: 139,width: 138,);
   }
 
   Widget _buildEmailTextField() {
@@ -116,21 +118,20 @@ class LoginScreen extends StatelessWidget {
       prefixIcon: Icons.lock,
       isPasswordField: true,
     );
-
   }
 
   Widget _buildLoginButton(BuildContext context) {
     return CustomButton(
-      buttonLabelText : 'تسجيل الدخول',
-        buttonLabelStyle: TextStyle(color: AppColors.blue20),
+      buttonLabelText: 'تسجيل الدخول',
+      buttonLabelStyle: TextStyle(color: AppColors.blue20),
       backgroundColor: AppColors.white,
-      onPress: (){
+      onPress: () {
         BlocProvider.of<LoginBloc>(context).add(
-          LoginButtonEvent(email: emailController.text ,password: passwordController.text),
+          LoginButtonEvent(
+              email: emailController.text, password: passwordController.text),
         );
       },
-
-      );
+    );
   }
 
   Widget _buildSocialMediaLoginButtons() {
@@ -147,7 +148,8 @@ class LoginScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: ClipOval(
-              child: Image.asset('assets/images/googleLogo.png', fit: BoxFit.cover),
+              child: Image.asset('assets/images/googleLogo.png',
+                  fit: BoxFit.cover),
             ),
           ),
         ),
@@ -179,7 +181,7 @@ class LoginScreen extends StatelessWidget {
     LoadingManager().showLoading();
   }
 
-  void _emailEmptyFormatState(String errorMessage,BuildContext context) {
+  void _emailEmptyFormatState(String errorMessage, BuildContext context) {
     LoadingManager().hideLoading();
     showDialog(
       context: context,
@@ -203,7 +205,7 @@ class LoginScreen extends StatelessWidget {
     // passwordErrorMessage = "";
   }
 
-  void _passwordEmptyFormatState(String errorMessage,BuildContext context) {
+  void _passwordEmptyFormatState(String errorMessage, BuildContext context) {
     LoadingManager().hideLoading();
     showDialog(
       context: context,
@@ -227,23 +229,28 @@ class LoginScreen extends StatelessWidget {
     // passwordErrorMessage = "";
   }
 
-  void _callFirebaseLogin(String email, String password,BuildContext context) {
-    BlocProvider.of<LoginBloc>(context).add(CallFirebaseLoginEvent(email: email, password: password));
+  void _callFirebaseLogin(String email, String password, BuildContext context) {
+    BlocProvider.of<LoginBloc>(context)
+        .add(CallFirebaseLoginEvent(email: email, password: password));
   }
 
   void _loginSuccessState(BuildContext context, String? role) {
     LoadingManager().hideLoading();
     print("I'm in screen $role");
-    if(role == 'Admin') {
-      BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent(userType: UserType.admin));
+    if (role == 'Admin') {
+      BlocProvider.of<LoginBloc>(context)
+          .add(NavigateHomeScreenEvent(userType: UserType.admin));
     } else if (role == 'Coach') {
-      BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent(userType: UserType.coach));
+      BlocProvider.of<LoginBloc>(context)
+          .add(NavigateHomeScreenEvent(userType: UserType.coach));
     } else {
-      BlocProvider.of<LoginBloc>(context).add(NavigateHomeScreenEvent(userType: UserType.user));
+      BlocProvider.of<LoginBloc>(context)
+          .add(NavigateHomeScreenEvent(userType: UserType.user));
     }
   }
 
-  void _failErrorMessage({required String errorMessage,required BuildContext context}) {
+  void _failErrorMessage(
+      {required String errorMessage, required BuildContext context}) {
     LoadingManager().hideLoading();
     showDialog(
       context: context,
@@ -265,13 +272,27 @@ class LoginScreen extends StatelessWidget {
 
   void _navigateToHome(BuildContext context, UserType userType) {
     LoadingManager().hideLoading();
+
     if (userType == UserType.admin) {
-      Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: adminServices);
+      Navigator.pushNamed(
+        context,
+        RoutesName.homeRoute,
+        arguments: adminServices,
+      );
     } else if (userType == UserType.coach) {
-      Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: coachServices);
+      Navigator.pushNamed(
+        context,
+        RoutesName.homeRoute,
+        arguments: coachServices,
+      );
     } else {
       print("object ${userServices.servicesList[0].title}");
-      Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: userServices);
+      // Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: userServices);
+      Navigator.pushNamed(
+        context,
+        RoutesName.homeRoute,
+        arguments: userServices,
+      );
     }
   }
 
@@ -279,5 +300,4 @@ class LoginScreen extends StatelessWidget {
     LoadingManager().hideLoading();
     Navigator.of(context).pushNamed(RoutesName.registerRoute);
   }
-
 }

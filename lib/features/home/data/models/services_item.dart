@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mackenzie_academy/core/router/routes_name.dart';
 
 
 class ServicesItem {
@@ -28,6 +29,7 @@ List<ServicesItem> adminServicesItem = [
   ServicesItem(title: 'الاشتراكات', icon: Icons.card_membership),
   ServicesItem(title: 'الإيواء', icon: Icons.add_home_outlined),
   ServicesItem(title: 'المدربين', icon: Icons.add_home_outlined),
+  ServicesItem(title: 'add acc.', icon: Icons.add_home_outlined,routeName: RoutesName.loginRoute),
   // Add more objects as needed
 ];
 
