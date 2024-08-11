@@ -21,20 +21,7 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginInitial) {
             // TODO  : check if email and password is remembered
-          }
-          // if (state is EmailEmptyFormatState) {
-          //   _emailEmptyFormatState("translate(state.emailValidatorMessage)",context);
-          // } else if (state is EmailFormatCorrectState) {
-          //   _emailFormatCorrectState();
-          // } else if (state is PasswordEmptyFormatState) {
-          //   _passwordEmptyFormatState(
-          //       "translate(state.passwordValidatorMessage)",context
-          //   );
-          // }
-          // else if (state is PasswordFormatCorrectState) {
-          //   _passwordFormatCorrectState();
-          // }
-          else if (state is NetworkErrorState) {
+          } else if (state is NetworkErrorState) {
             print("&&&&&&&&& ${state.message}");
             _failErrorMessage(errorMessage: state.message, context: context);
           } else if (state is ValidLoginFormState) {
@@ -77,6 +64,8 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               _buildPasswordTextField(),
               const SizedBox(height: 20),
+              _buildRememberMeCheckbox(true),
+              const SizedBox(height: 20),
               _buildLoginButton(context),
               const SizedBox(height: 20),
               GestureDetector(
@@ -90,7 +79,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildSocialMediaLoginButtons()
+              _buildSocialMediaLoginButtons(),
             ],
           ),
         ),
@@ -173,6 +162,19 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildRememberMeCheckbox(bool rememberMe) {
+    return CheckboxListTile(
+      title: Text('Remember me', style: TextStyle(color: Colors.white)),
+      value: rememberMe,
+      onChanged: (bool? value) {
+        rememberMe = value ?? false;
+      },
+      controlAffinity: ListTileControlAffinity.leading,
+      activeColor: AppColors.white,
+      checkColor: AppColors.blue20,
     );
   }
 
