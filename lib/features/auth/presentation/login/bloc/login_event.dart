@@ -29,22 +29,25 @@ class ValidatePasswordEvent extends LoginEvent {
 class LoginButtonEvent extends LoginEvent {
   final String email;
   final String password;
+  final bool isRememberMe;
 
-  LoginButtonEvent({required this.email, required this.password});
+  LoginButtonEvent({required this.email, required this.password,required this.isRememberMe});
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [email, password,isRememberMe];
 }
 
 // Firebase's call
 class CallFirebaseLoginEvent extends LoginEvent {
   final String email;
   final String password;
+  final bool isRememberMe;
 
-  CallFirebaseLoginEvent({required this.email, required this.password});
+
+  CallFirebaseLoginEvent({required this.email, required this.password,required this.isRememberMe});
 
   @override
-  List<Object?> get props => [email, password];
+  List<Object?> get props => [email, password,isRememberMe];
 }
 
 

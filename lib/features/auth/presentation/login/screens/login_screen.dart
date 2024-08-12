@@ -5,6 +5,7 @@ import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/loading_manager.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_button.dart';
+import 'package:mackenzie_academy/core/widgets/component/custom_checkbox.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
 import 'package:mackenzie_academy/features/home/data/models/users_services.dart';
@@ -12,20 +13,36 @@ import 'package:mackenzie_academy/features/home/data/models/users_services.dart'
 class LoginScreen extends StatelessWidget {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var isRememberMe = false;
+
+  LoginScreen({super.key});
+
+  @override
+  void initState () {
+    print("object");
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => servicesLocator<LoginBloc>(),
-      child: BlocConsumer<LoginBloc, LoginState>(
+    return
+      // BlocProvider(
+      // create: (context) => servicesLocator<LoginBloc>(),
+      // child:
+      BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginInitial) {
             // TODO  : check if email and password is remembered
+            _checkUserNameAndPasswordState(context);
+          } else if (state is ValidateStoredDataEvent) {
+            // isRememberMe = state.isRememberMe;
+            // emailController = state;
+            // passwordController ;
           } else if (state is NetworkErrorState) {
             print("&&&&&&&&& ${state.message}");
             _failErrorMessage(errorMessage: state.message, context: context);
           } else if (state is ValidLoginFormState) {
-            _callFirebaseLogin(state.email, state.password, context);
+            _callFirebaseLogin(state.email, state.password, state.isRememberMe, context);
+            isRememberMe = state.isRememberMe;
           } else if (state is LoginLoadingState) {
             _loginLoadingState();
           } else if (state is LoginFailState) {
@@ -44,8 +61,8 @@ class LoginScreen extends StatelessWidget {
         builder: (context, state) {
           return _loginWidget(context: context);
         },
-      ),
-    );
+      );
+    // );
   }
 
   Widget _loginWidget({required BuildContext context}) {
@@ -64,7 +81,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               _buildPasswordTextField(),
               const SizedBox(height: 20),
-              _buildRememberMeCheckbox(true),
+              _buildRememberMeCheckbox(),
               const SizedBox(height: 20),
               _buildLoginButton(context),
               const SizedBox(height: 20),
@@ -117,7 +134,7 @@ class LoginScreen extends StatelessWidget {
       onPress: () {
         BlocProvider.of<LoginBloc>(context).add(
           LoginButtonEvent(
-              email: emailController.text, password: passwordController.text),
+              email: emailController.text, password: passwordController.text,isRememberMe: isRememberMe),
         );
       },
     );
@@ -165,16 +182,13 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildRememberMeCheckbox(bool rememberMe) {
-    return CheckboxListTile(
-      title: Text('Remember me', style: TextStyle(color: Colors.white)),
-      value: rememberMe,
+  Widget _buildRememberMeCheckbox() {
+    return CustomCheckbox(
+      isRememberMe: isRememberMe,
       onChanged: (bool? value) {
-        rememberMe = value ?? false;
+        isRememberMe = value ?? false;
+        print("_buildRememberMeCheckbox ${isRememberMe}");
       },
-      controlAffinity: ListTileControlAffinity.leading,
-      activeColor: AppColors.white,
-      checkColor: AppColors.blue20,
     );
   }
 
@@ -183,62 +197,19 @@ class LoginScreen extends StatelessWidget {
     LoadingManager().showLoading();
   }
 
-  void _emailEmptyFormatState(String errorMessage, BuildContext context) {
-    LoadingManager().hideLoading();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("${errorMessage}"),
-          actions: <Widget>[
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+
+  void _checkUserNameAndPasswordState(BuildContext context) {
+    print("_checkUserNameAndPasswordState ----------");
+    BlocProvider.of<LoginBloc>(context).add(ValidateStoredDataEvent());
   }
 
-  void _emailFormatCorrectState() {
-    // passwordErrorMessage = "";
-  }
-
-  void _passwordEmptyFormatState(String errorMessage, BuildContext context) {
-    LoadingManager().hideLoading();
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("${errorMessage}"),
-          actions: <Widget>[
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _passwordFormatCorrectState() {
-    // passwordErrorMessage = "";
-  }
-
-  void _callFirebaseLogin(String email, String password, BuildContext context) {
+  void _callFirebaseLogin(String email, String password,bool isRememberMe, BuildContext context) {
     BlocProvider.of<LoginBloc>(context)
-        .add(CallFirebaseLoginEvent(email: email, password: password));
+        .add(CallFirebaseLoginEvent(email: email, password: password,isRememberMe: isRememberMe));
   }
 
   void _loginSuccessState(BuildContext context, String? role) {
     LoadingManager().hideLoading();
-    print("I'm in screen $role");
     if (role == 'Admin') {
       BlocProvider.of<LoginBloc>(context)
           .add(NavigateHomeScreenEvent(userType: UserType.admin));
@@ -288,8 +259,6 @@ class LoginScreen extends StatelessWidget {
         arguments: coachServices,
       );
     } else {
-      print("object ${userServices.servicesList[0].title}");
-      // Navigator.of(context).pushNamed(RoutesName.homeRoute,arguments: userServices);
       Navigator.pushNamed(
         context,
         RoutesName.homeRoute,

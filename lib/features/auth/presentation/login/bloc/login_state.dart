@@ -24,8 +24,9 @@ class PasswordFormatCorrectState extends LoginState {}
 class ValidLoginFormState extends LoginState {
   final String email;
   final String password;
+  final bool isRememberMe;
 
-  ValidLoginFormState(this.email, this.password);
+  ValidLoginFormState(this.email, this.password,this.isRememberMe);
 }
 
 class LoginLoadingState extends LoginState {}

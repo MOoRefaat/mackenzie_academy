@@ -49,4 +49,13 @@ class SharedPreferenceManager {
         "";
   }
 
+  Future<void> setIsRememberMe(bool value) async {
+    await SharedPreferencesUtils.setBool(SharedPreferenceKeys.rememberMe, data: value);
+  }
+
+  Future<bool> getIsRememberMe() async {
+    return await SharedPreferencesUtils.getBool(SharedPreferenceKeys.rememberMe) ??
+        false;
+  }
+
 }

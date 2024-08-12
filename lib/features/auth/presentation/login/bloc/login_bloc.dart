@@ -1,13 +1,9 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/core/utils/validator.dart';
-import 'package:mackenzie_academy/features/auth/data/models/login_request.dart';
-import 'package:mackenzie_academy/features/auth/data/models/login_response.dart';
-import 'package:mackenzie_academy/features/auth/domain/usecases/auth_validation_usecase.dart';
 import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_login.dart';
 import 'package:mackenzie_academy/features/home/data/models/users_services.dart';
 import 'package:meta/meta.dart';
@@ -22,8 +18,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager)
       : super(LoginInitial()) {
-    // on<ValidateEmailEvent>(_onValidateEmailEvent);
-    // on<ValidatePasswordEvent>(_onValidatePasswordEvent);
     on<LoginButtonEvent>(_onLoginEvent);
     on<CallFirebaseLoginEvent>(_onCallFirebaseLoginEvent);
     on<ValidateStoredDataEvent>(_onValidateStoredDataEvent);
@@ -33,58 +27,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _onValidateStoredDataEvent(
       ValidateStoredDataEvent event, Emitter<LoginState> emit) async {
-    // String? name = await prefManager.getUsername();
-    // String? password = await prefManager.getUserPassword();
-    // if (name != null &&
-    //     name.isNotEmpty &&
-    //     password != null &&
-    //     password.isNotEmpty) {
-    //   emit(ValidLoginFormState(name, password));
-    // }
-  }
-
-  FutureOr<void> _onValidateEmailEvent(
-      ValidateEmailEvent event, Emitter<LoginState> emit) {
-    ValidationState validateState = Validator.validateEmail(event.email);
-    if (validateState == ValidationState.Valid) {
-      emit(EmailFormatCorrectState());
-    } else {
-      emit(EmailEmptyFormatState(
-          emailValidatorMessage: "LangKeys.username_is_empty"));
-    }
-  }
-
-  FutureOr<void> _onValidatePasswordEvent(
-      ValidatePasswordEvent event, Emitter<LoginState> emit) {
-    ValidationState validateState = Validator.validatePassword(event.password);
-    if (validateState == ValidationState.Valid) {
-      emit(PasswordFormatCorrectState());
-    } else {
-      emit(PasswordEmptyFormatState(
-          passwordValidatorMessage:
-              "LangKeys.try_with_correct_username_password"));
+    String? name = await sharedPreferenceManager.getUsername();
+    String? password = await sharedPreferenceManager.getPassword();
+    bool? isRememberMe = await sharedPreferenceManager.getIsRememberMe();
+    if (name != null &&
+        name.isNotEmpty &&
+        password != null &&
+        password.isNotEmpty &&
+        isRememberMe != null) {
+      emit(ValidLoginFormState(name, password,isRememberMe));
     }
   }
 
   FutureOr<void> _onLoginEvent(
       LoginButtonEvent event, Emitter<LoginState> emit) async {
-    // final validationsState = AuthValidationUseCase()
-    //     .validateFormUseCase(event.email, event.password);
-    // if (validationsState.isNotEmpty) {
-    //   for (var element in validationsState) {
-    //     if (element == ValidationState.userNameEmpty) {
-    //       emit(EmailEmptyFormatState(emailValidatorMessage: "email_is_empty"));
-    //     } else if (element == ValidationState.passwordNumberEmpty) {
-    //       emit(PasswordEmptyFormatState(
-    //           passwordValidatorMessage: "password_is_empty"));
-    //     } else if (element == ValidationState.Formatting) {
-    //       emit(EmailEmptyFormatState(
-    //           emailValidatorMessage: "try_with_correct_username_password"));
-    //     }
-    //   }
-    // } else {
-    emit(ValidLoginFormState(event.email, event.password));
-    // }
+    emit(ValidLoginFormState(event.email, event.password,event.isRememberMe));
   }
 
   FutureOr<void> _onCallFirebaseLoginEvent(
@@ -102,6 +59,16 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           final String role = userData['role'];
           print("User role: $role");
           emit(LoginSuccessState(role));
+          print("_onCallFirebaseLoginEvent ${event.isRememberMe}");
+          if(event.isRememberMe == true) {
+            sharedPreferenceManager.setIsRememberMe(event.isRememberMe);
+            sharedPreferenceManager.setUsername(event.email);
+            sharedPreferenceManager.setPassword(event.password);
+          } else {
+            sharedPreferenceManager.setIsRememberMe(event.isRememberMe);
+            sharedPreferenceManager.setUsername("");
+            sharedPreferenceManager.setPassword("");
+          }
         } else {
           print("userDoc no");
         }
