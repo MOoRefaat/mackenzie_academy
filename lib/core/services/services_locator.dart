@@ -37,7 +37,6 @@ class ServicesLocator {
     /// DATA SOURCE
     servicesLocator.registerLazySingleton<AuthRemoteDatasource>(() => AuthRemoteDatasourceImpl());
 
-
     servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager());
   }
 }

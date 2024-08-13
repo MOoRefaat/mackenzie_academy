@@ -17,18 +17,13 @@ class LoginScreen extends StatelessWidget {
 
   LoginScreen({super.key});
 
-  @override
-  void initState () {
-    print("object");
-  }
 
   @override
   Widget build(BuildContext context) {
     return
-      // BlocProvider(
-      // create: (context) => servicesLocator<LoginBloc>(),
-      // child:
-      BlocConsumer<LoginBloc, LoginState>(
+      BlocProvider(
+      create: (context) => servicesLocator<LoginBloc>(),
+      child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginInitial) {
             // TODO  : check if email and password is remembered
@@ -59,10 +54,13 @@ class LoginScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          if(state is LoginInitial) {
+            _checkUserNameAndPasswordState(context);
+          }
           return _loginWidget(context: context);
         },
-      );
-    // );
+      )
+    );
   }
 
   Widget _loginWidget({required BuildContext context}) {

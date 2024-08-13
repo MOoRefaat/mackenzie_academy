@@ -79,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _onNavigateToHomeEvent(
-      NavigateHomeScreenEvent event, Emitter<LoginState> emit) {
+      NavigateHomeScreenEvent event, Emitter<LoginState> emit)  {
     emit(NavigateToHomeScreenState(event.userType));
   }
 
