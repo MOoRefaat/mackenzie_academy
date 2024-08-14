@@ -6,12 +6,13 @@ class CustomTextField extends StatefulWidget {
   final String hintText;
   final IconData prefixIcon;
   final bool isPasswordField;
+  final Color? fillColor;
 
   CustomTextField({
     required this.controller,
     required this.hintText,
     required this.prefixIcon,
-    this.isPasswordField = false,
+    this.isPasswordField = false, this.fillColor,
   });
 
   @override
@@ -31,7 +32,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         hintStyle: TextStyle(color: AppColors.white),
         prefixIcon: Icon(widget.prefixIcon, color: AppColors.white),
         filled: true,
-        fillColor: AppColors.white.withOpacity(0.1),
+        fillColor: widget.fillColor ?? AppColors.white.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,

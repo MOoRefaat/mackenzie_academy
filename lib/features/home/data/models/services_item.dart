@@ -29,7 +29,7 @@ List<ServicesItem> adminServicesItem = [
   ServicesItem(title: 'الاشتراكات', icon: Icons.card_membership),
   ServicesItem(title: 'الإيواء', icon: Icons.add_home_outlined),
   ServicesItem(title: 'المدربين', icon: Icons.add_home_outlined),
-  ServicesItem(title: 'add acc.', icon: Icons.add_home_outlined,routeName: RoutesName.loginRoute),
+  ServicesItem(title: 'add acc.', icon: Icons.add_home_outlined,routeName: RoutesName.addAccRoute),
   // Add more objects as needed
 ];
 

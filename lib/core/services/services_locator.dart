@@ -1,7 +1,6 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
-import 'package:mackenzie_academy/core/shared_preference/shered_prefrence_utlis.dart';
+import 'package:mackenzie_academy/features/add_users_by_admin/presentation/register/bloc/adding_users_bloc.dart';
 import 'package:mackenzie_academy/features/auth/data/datasource/remote/login_remote_data_source.dart';
 import 'package:mackenzie_academy/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
@@ -10,6 +9,8 @@ import 'package:mackenzie_academy/features/auth/domain/usecases/remote/post_regi
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
 import 'package:mackenzie_academy/features/auth/presentation/register/bloc/register_bloc.dart';
 import 'package:mackenzie_academy/features/home/presentation/bloc/home_bloc.dart';
+import 'package:mackenzie_academy/core/shared_preference/shered_prefrence_utlis.dart';
+
 
 final servicesLocator = GetIt.instance;
 
@@ -20,6 +21,7 @@ class ServicesLocator {
             () => LoginBloc(servicesLocator(),servicesLocator()));
     servicesLocator.registerLazySingleton(() => RegisterBloc());
     servicesLocator.registerLazySingleton(() => HomeBloc());
+    servicesLocator.registerLazySingleton(() => AddingUsersBloc());
 
     /// Remote Use Cases
     servicesLocator.registerLazySingleton(
