@@ -3,59 +3,63 @@ import 'package:mackenzie_academy/core/shared_preference/shered_prefrence_utlis.
 
 class SharedPreferenceManager {
 
-  static final SharedPreferenceManager _sharedPreference = SharedPreferenceManager._internal();
+  final SharedPreferencesUtils sharedPreferencesUtils;
 
-  factory SharedPreferenceManager() {
-    return _sharedPreference;
-  }
+  SharedPreferenceManager({required this.sharedPreferencesUtils});
 
-  SharedPreferenceManager._internal();
+  // static final SharedPreferenceManager _sharedPreference = SharedPreferenceManager._internal();
+  //
+  // factory SharedPreferenceManager() {
+  //   return _sharedPreference;
+  // }
+  //
+  // SharedPreferenceManager._internal();
 
-  Future<bool> setLang(String data) async {
-    return await SharedPreferencesUtils.setString(
-        SharedPreferenceKeys.lang, data);
+  setLang(String data) {
+    return sharedPreferencesUtils.saveData<String>(SharedPreferenceKeys.lang, data);
   }
 
   Future<String> getLang() async {
-    return await SharedPreferencesUtils.getString(SharedPreferenceKeys.lang) ??
-        "";
+    return await sharedPreferencesUtils.getData<String>(SharedPreferenceKeys.lang);
   }
 
-  Future<void> setMode(bool value) async {
-    await SharedPreferencesUtils.setBool(SharedPreferenceKeys.mode, data: value);
+  setMode(bool value)  {
+    return sharedPreferencesUtils.saveData<bool>(SharedPreferenceKeys.mode, value);
   }
 
   Future<bool> getMode() async {
-    return await SharedPreferencesUtils.getBool(SharedPreferenceKeys.mode) ?? false;
+    return await sharedPreferencesUtils.getData(SharedPreferenceKeys.mode) ?? false;
   }
 
-  Future<bool> setUsername(String data) async {
-    return await SharedPreferencesUtils.setString(
-        SharedPreferenceKeys.username, data);
+   setUsername(String data)  {
+    return sharedPreferencesUtils.saveData<String>(SharedPreferenceKeys.username, data);
   }
 
   Future<String> getUsername() async {
-    return await SharedPreferencesUtils.getString(SharedPreferenceKeys.username) ??
+    return await sharedPreferencesUtils.getData(SharedPreferenceKeys.username) ??
         "";
   }
 
-  Future<bool> setPassword(String data) async {
-    return await SharedPreferencesUtils.setString(
+  setPassword(String data) async {
+    return await sharedPreferencesUtils.saveData<String>(
         SharedPreferenceKeys.password, data);
   }
 
   Future<String> getPassword() async {
-    return await SharedPreferencesUtils.getString(SharedPreferenceKeys.password) ??
+    return await sharedPreferencesUtils.getData(SharedPreferenceKeys.password) ??
         "";
   }
 
-  Future<void> setIsRememberMe(bool value) async {
-    await SharedPreferencesUtils.setBool(SharedPreferenceKeys.rememberMe, data: value);
+   setIsRememberMe(bool value) async {
+    return sharedPreferencesUtils..saveData<bool>(SharedPreferenceKeys.rememberMe, value);
   }
 
   Future<bool> getIsRememberMe() async {
-    return await SharedPreferencesUtils.getBool(SharedPreferenceKeys.rememberMe) ??
-        false;
+    final isss = await sharedPreferencesUtils.getData(SharedPreferenceKeys.rememberMe);
+    if(isss == "true"){
+      return true;
+    } else
+        return false;
   }
 
 }

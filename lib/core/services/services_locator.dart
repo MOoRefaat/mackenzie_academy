@@ -1,5 +1,7 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
+import 'package:mackenzie_academy/core/shared_preference/shered_prefrence_utlis.dart';
 import 'package:mackenzie_academy/features/auth/data/datasource/remote/login_remote_data_source.dart';
 import 'package:mackenzie_academy/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
@@ -37,6 +39,8 @@ class ServicesLocator {
     /// DATA SOURCE
     servicesLocator.registerLazySingleton<AuthRemoteDatasource>(() => AuthRemoteDatasourceImpl());
 
-    servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager());
+    servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager(sharedPreferencesUtils: servicesLocator()));
+    servicesLocator.registerFactory<SharedPreferencesUtils>(() => SharedPreferencesUtils());
+    // servicesLocator.registerFactory<FlutterSecureStorage>(() => FlutterSecureStorage());
   }
 }
