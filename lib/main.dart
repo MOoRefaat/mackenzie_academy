@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mackenzie_academy/core/router/app_router.dart';
 import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/bloc_observer.dart';
+import 'package:mackenzie_academy/features/add_users_by_admin/presentation/register/bloc/adding_users_bloc.dart';
 import 'package:mackenzie_academy/features/auth/presentation/login/bloc/login_bloc.dart';
 import 'package:mackenzie_academy/features/auth/presentation/register/bloc/register_bloc.dart';
 import 'package:mackenzie_academy/features/home/presentation/bloc/home_bloc.dart';
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) =>
         servicesLocator<HomeBloc>()
+        ),
+        BlocProvider(create: (context) =>
+            servicesLocator<AddingUsersBloc>()
         ),
       ],
       child: MaterialApp(

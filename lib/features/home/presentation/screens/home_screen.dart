@@ -6,9 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mackenzie_academy/core/router/routes_name.dart';
 import 'package:mackenzie_academy/core/services/services_locator.dart';
 import 'package:mackenzie_academy/core/utils/loading_manager.dart';
-import 'package:mackenzie_academy/core/utils/validator.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_card.dart';
-import 'package:mackenzie_academy/features/auth/presentation/login/screens/login_screen.dart';
 import 'package:mackenzie_academy/features/home/data/models/services_item.dart';
 import 'package:mackenzie_academy/features/home/data/models/users_services.dart';
 import 'package:mackenzie_academy/features/home/presentation/bloc/home_bloc.dart';
@@ -265,7 +263,7 @@ class HomeScreen extends StatelessWidget {
           cardLabelText: servicesList[index].title,
           cardIcon: servicesList[index].icon,
           onPress: (){
-            if (servicesList[index].routeName == null) {
+            if (servicesList[index].routeName != null) {
               Navigator.of(context).pushNamed(servicesList[index].routeName!);
             } else {
               print("object");
