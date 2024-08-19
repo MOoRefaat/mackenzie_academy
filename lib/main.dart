@@ -12,6 +12,7 @@ import 'package:mackenzie_academy/features/splash/presentation/screens/splash_sc
 import 'features/auth/presentation/login/firebase_options.dart';
 
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
+        // localizationsDelegates: [S.delegate],
         onGenerateRoute: AppRouter.generateRoute,
       ),
     );

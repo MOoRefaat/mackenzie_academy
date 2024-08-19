@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:mackenzie_academy/core/shared_preference/shared_preference_manager.dart';
 import 'package:mackenzie_academy/features/add_users_by_admin/presentation/register/bloc/adding_users_bloc.dart';
+import 'package:mackenzie_academy/features/app_settings/presentation/bloc/app_settings_bloc.dart';
 import 'package:mackenzie_academy/features/auth/data/datasource/remote/login_remote_data_source.dart';
 import 'package:mackenzie_academy/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:mackenzie_academy/features/auth/domain/repositories/auth_repository.dart';
@@ -22,6 +23,7 @@ class ServicesLocator {
     servicesLocator.registerLazySingleton(() => RegisterBloc());
     servicesLocator.registerLazySingleton(() => HomeBloc());
     servicesLocator.registerLazySingleton(() => AddingUsersBloc());
+    servicesLocator.registerLazySingleton(() => AppSettingsBloc());
 
     /// Remote Use Cases
     servicesLocator.registerLazySingleton(

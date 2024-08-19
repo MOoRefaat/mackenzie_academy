@@ -174,6 +174,8 @@ class HomeScreen extends StatelessWidget {
               title: Text('الاعدادات'),
               onTap: () {
                 // Handle navigation
+                Navigator.of(context).pushNamed(RoutesName.appSettingsRoute);
+
               },
             ),
             ListTile(
