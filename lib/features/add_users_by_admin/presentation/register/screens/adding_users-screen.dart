@@ -6,13 +6,20 @@ import 'package:mackenzie_academy/core/utils/loading_manager.dart';
 import 'package:mackenzie_academy/core/utils/theme/color.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_button.dart';
 import 'package:mackenzie_academy/core/widgets/component/custom_text_field.dart';
+import 'package:mackenzie_academy/core/widgets/custom_app_bar.dart';
+import 'package:mackenzie_academy/core/widgets/drawer_widget.dart';
 import 'package:mackenzie_academy/features/add_users_by_admin/presentation/register/bloc/adding_users_bloc.dart';
+import 'package:mackenzie_academy/features/home/presentation/bloc/home_bloc.dart';
 
 class AddingUsersScreen extends StatelessWidget {
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  AddingUsersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,28 +57,40 @@ class AddingUsersScreen extends StatelessWidget {
   Widget _registerWidget(
       {required BuildContext context, required AddingUsersState state}) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
-        child: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white, // Set the color to white
-          ),
-          backgroundColor: Color(0xFF0A155A),
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/logo1.png',
-                width: 200,
-                height: 75,
-                //   fit: BoxFit.none,
-              ),
-            ],
-          ),
+        child: CustomAppBar(
+          scaffoldKey: _scaffoldKey,
         ),
       ),
-    //  backgroundColor: AppColors.white,
+      endDrawer: CustomDrawer(
+        drawerItems: [
+          DrawerItem(
+            leading: const Icon(Icons.card_membership),
+            title: 'اشتركاتي',
+            onTap: () {
+              Navigator.pop(context);
+              // Navigate to home or perform other actions
+            },
+          ),
+          DrawerItem(
+            leading: const Icon(
+              Icons.logout,
+              color: Colors.red,
+            ),
+            title: 'تسجيل خروج',
+            titleStyle: TextStyle(color: Colors.red),
+            onTap: () {
+              BlocProvider.of<HomeBloc>(context).add(LogoutEvent());
+            },
+          ),
+        ],
+        accountName: 'جنا السالم',
+        accountEmail: 'xxxxx011',
+        currentAccountPicture: Image.asset('assets/images/profileIcon.png'),
+      ),
+      //  backgroundColor: AppColors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
