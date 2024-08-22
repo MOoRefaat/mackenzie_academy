@@ -52,8 +52,16 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.blue20,
         iconTheme: IconThemeData(
-            color: AppColors.white), // Set back button color to white
+            color: AppColors.white),
+        // TODO : CHAnge icon
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: AppColors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
+
       backgroundColor: AppColors.blue20,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

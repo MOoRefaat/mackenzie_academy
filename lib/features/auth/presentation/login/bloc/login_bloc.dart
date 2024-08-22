@@ -27,6 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _onValidateStoredDataEvent(
       ValidateStoredDataEvent event, Emitter<LoginState> emit) async {
+    emit(LoginLoadingState());
     String? name = await sharedPreferenceManager.getUsername();
     String? password = await sharedPreferenceManager.getRole();
     bool? isRememberMe = await sharedPreferenceManager.getIsRememberMe();
@@ -35,7 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password != null &&
         password.isNotEmpty &&
         isRememberMe != null) {
-      emit(ValidLoginFormState(name, password,isRememberMe));
+      emit(ValidateStoredDataState(name, password,isRememberMe));
     }
   }
 
@@ -74,6 +75,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         }
       }
     } on FirebaseAuthException catch (e) {
+      // TODO : FirebaseAuthException handel
+      print("FirebaseAuthException: ${e.code}");
       emit(NetworkErrorState(e.code));
     }
   }

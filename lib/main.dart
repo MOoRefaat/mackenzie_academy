@@ -35,16 +35,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) =>
-        servicesLocator<LoginBloc>()
-        ),
-        BlocProvider(create: (context) =>
-            servicesLocator<RegisterBloc>()
-        ),
-        BlocProvider(create: (context) =>
         servicesLocator<HomeBloc>()
-        ),
-        BlocProvider(create: (context) =>
-            servicesLocator<AddingUsersBloc>()
         ),
         BlocProvider(create: (context) =>
             servicesLocator<AppSettingsBloc>()

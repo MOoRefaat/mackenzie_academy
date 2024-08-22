@@ -3,5 +3,6 @@
     "language": "اللغة",
     "title_login": "تسجيل الدخول",
     "label_username": "اسم المستخدم",
+    "label_email": "البريد الالكتروني",
     "label_password": "كلمه المرور"
 }

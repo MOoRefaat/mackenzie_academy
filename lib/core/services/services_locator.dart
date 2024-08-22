@@ -17,15 +17,15 @@ final servicesLocator = GetIt.instance;
 
 class ServicesLocator {
   void init() {
-    // Bloc
-    servicesLocator.registerLazySingleton(
+    // Bloc: Factory
+    servicesLocator.registerFactory(
             () => LoginBloc(servicesLocator(),servicesLocator()));
-    servicesLocator.registerLazySingleton(() => RegisterBloc());
-    servicesLocator.registerLazySingleton(() => HomeBloc());
-    servicesLocator.registerLazySingleton(() => AddingUsersBloc());
-    servicesLocator.registerLazySingleton(() => AppSettingsBloc());
+    servicesLocator.registerFactory(() => RegisterBloc());
+    servicesLocator.registerFactory(() => HomeBloc());
+    servicesLocator.registerFactory(() => AddingUsersBloc());
+    servicesLocator.registerFactory(() => AppSettingsBloc());
 
-    /// Remote Use Cases
+    /// Remote Use Cases: Singleton
     servicesLocator.registerLazySingleton(
             () => PostLoginByEmailUseCase(servicesLocator()));
     servicesLocator.registerLazySingleton(
@@ -35,16 +35,15 @@ class ServicesLocator {
     // Local Use Cases
 
 
-    /// Repository
+    /// Repository: Singleton
     servicesLocator.registerLazySingleton<AuthRepository>(
             () => AuthRepositoryImpl(servicesLocator()));
 
 
-    /// DATA SOURCE
+    /// DATA SOURCE: Singleton
     servicesLocator.registerLazySingleton<AuthRemoteDatasource>(() => AuthRemoteDatasourceImpl());
-
+    /// DATA SOURCE: Factory
     servicesLocator.registerFactory<SharedPreferenceManager>(() => SharedPreferenceManager(sharedPreferencesUtils: servicesLocator()));
     servicesLocator.registerFactory<SharedPreferencesUtils>(() => SharedPreferencesUtils());
-    // servicesLocator.registerFactory<FlutterSecureStorage>(() => FlutterSecureStorage());
   }
 }
