@@ -27,17 +27,20 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginInitial) {
             // TODO  : check if email and password is remembered
-            _checkUserNameAndPasswordState(context);
+            _checkEmailAndPasswordState(context);
           } else if (state is ValidateStoredDataEvent) {
-            // isRememberMe = state.isRememberMe;
+            // isRememberMe = state.isRememberMeemberMe;
             // emailController = state;
             // passwordController ;
           } else if (state is NetworkErrorState) {
             print("&&&&&&&&& ${state.message}");
             _failErrorMessage(errorMessage: state.message, context: context);
           } else if (state is ValidLoginFormState) {
-            _callFirebaseLogin(state.email, state.password, state.isRememberMe, context);
+            print("IDDDDDDD ${state.isRememberMe}");
             isRememberMe = state.isRememberMe;
+            emailController.text = state.email;
+            passwordController.text = state.password;
+            _callFirebaseLogin(state.email, state.password, state.isRememberMe, context);
           } else if (state is LoginLoadingState) {
             _loginLoadingState();
           } else if (state is LoginFailState) {
@@ -55,7 +58,7 @@ class LoginScreen extends StatelessWidget {
         },
         builder: (context, state) {
           if(state is LoginInitial) {
-            _checkUserNameAndPasswordState(context);
+            _checkEmailAndPasswordState(context);
           }
           return _loginWidget(context: context);
         },
@@ -181,6 +184,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildRememberMeCheckbox() {
+    print("IDDDDDDD 2 ${isRememberMe}");
     return CustomCheckbox(
       isRememberMe: isRememberMe,
       onChanged: (bool? value) {
@@ -196,7 +200,7 @@ class LoginScreen extends StatelessWidget {
   }
 
 
-  void _checkUserNameAndPasswordState(BuildContext context) {
+  void _checkEmailAndPasswordState(BuildContext context) {
     print("_checkUserNameAndPasswordState ----------");
     BlocProvider.of<LoginBloc>(context).add(ValidateStoredDataEvent());
   }

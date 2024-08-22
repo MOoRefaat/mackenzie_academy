@@ -74,8 +74,7 @@ class HomeScreen extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: 'الاعدادات',
             onTap: () {
-              Navigator.pop(context); // Close the drawer
-              // Navigate to settings or perform other actions
+              Navigator.of(context).pushNamed(RoutesName.appSettingsRoute);
             },
           ),
           DrawerItem(

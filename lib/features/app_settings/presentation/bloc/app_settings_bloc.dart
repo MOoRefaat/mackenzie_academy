@@ -5,7 +5,7 @@ part 'app_settings_event.dart';
 part 'app_settings_state.dart';
 
 class AppSettingsBloc extends Bloc<AppSettingsEvent, AppSettingsState> {
-  AppSettingsBloc() : super(AppSettingsInitial()) {
+  AppSettingsBloc() : super(AppSettingsInitialState()) {
     on<AppSettingsEvent>((event, emit) {
       // TODO: implement event handler
     });

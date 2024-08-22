@@ -28,7 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   FutureOr<void> _onValidateStoredDataEvent(
       ValidateStoredDataEvent event, Emitter<LoginState> emit) async {
     String? name = await sharedPreferenceManager.getUsername();
-    String? password = await sharedPreferenceManager.getPassword();
+    String? password = await sharedPreferenceManager.getRole();
     bool? isRememberMe = await sharedPreferenceManager.getIsRememberMe();
     if (name != null &&
         name.isNotEmpty &&
@@ -63,11 +63,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if(event.isRememberMe == true) {
             sharedPreferenceManager.setIsRememberMe(event.isRememberMe);
             sharedPreferenceManager.setUsername(event.email);
-            sharedPreferenceManager.setPassword(event.password);
+            sharedPreferenceManager.setRole(event.password);
           } else {
             sharedPreferenceManager.setIsRememberMe(event.isRememberMe);
             sharedPreferenceManager.setUsername("");
-            sharedPreferenceManager.setPassword("");
+            sharedPreferenceManager.setRole("");
           }
         } else {
           print("userDoc no");

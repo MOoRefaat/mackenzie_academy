@@ -5,6 +5,7 @@ enum UserType {
   admin,
   coach,
   user,
+  guest
 }
 
 class UsersServices {

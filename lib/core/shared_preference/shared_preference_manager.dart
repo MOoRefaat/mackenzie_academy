@@ -40,12 +40,12 @@ class SharedPreferenceManager {
         "";
   }
 
-  setPassword(String data) async {
+  setRole(String data) async {
     return await sharedPreferencesUtils.saveData<String>(
         SharedPreferenceKeys.password, data);
   }
 
-  Future<String> getPassword() async {
+  Future<String> getRole() async {
     return await sharedPreferencesUtils.getData(SharedPreferenceKeys.password) ??
         "";
   }
@@ -60,6 +60,16 @@ class SharedPreferenceManager {
       return true;
     } else
         return false;
+  }
+
+  setPassword(String data) async {
+    return await sharedPreferencesUtils.saveData<String>(
+        SharedPreferenceKeys.role, data);
+  }
+
+  Future<String> getPassword() async {
+    return await sharedPreferencesUtils.getData(SharedPreferenceKeys.role) ??
+        "";
   }
 
 }

@@ -4,4 +4,5 @@ class SharedPreferenceKeys {
   static const username = "username";
   static const password = "password";
   static const rememberMe = "rememberMe";
+  static const role = "role";
 }
