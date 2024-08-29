@@ -23,7 +23,7 @@ class ServicesLocator {
     servicesLocator.registerFactory(() => RegisterBloc());
     servicesLocator.registerFactory(() => HomeBloc());
     servicesLocator.registerFactory(() => AddingUsersBloc());
-    servicesLocator.registerFactory(() => AppSettingsBloc());
+    servicesLocator.registerFactory(() => AppSettingsBloc(servicesLocator()));
 
     /// Remote Use Cases: Singleton
     servicesLocator.registerLazySingleton(

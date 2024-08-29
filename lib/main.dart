@@ -39,6 +39,8 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(create: (context) =>
             servicesLocator<AppSettingsBloc>()
+            // ..getMode()
+            ..getLocale()
         ),
       ],
       child: MaterialApp(

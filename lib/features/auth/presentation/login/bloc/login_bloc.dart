@@ -15,6 +15,8 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final PostLoginByEmailUseCase _postLoginByEmailUseCase;
   final SharedPreferenceManager sharedPreferenceManager;
+  bool isRememberMe = false;
+
 
   LoginBloc(this._postLoginByEmailUseCase, this.sharedPreferenceManager)
       : super(LoginInitial()) {
@@ -30,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(LoginLoadingState());
     String? name = await sharedPreferenceManager.getUsername();
     String? password = await sharedPreferenceManager.getRole();
-    bool? isRememberMe = await sharedPreferenceManager.getIsRememberMe();
+    isRememberMe = await sharedPreferenceManager.getIsRememberMe();
     if (name != null &&
         name.isNotEmpty &&
         password != null &&
